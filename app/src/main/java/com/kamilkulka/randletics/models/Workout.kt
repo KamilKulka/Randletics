@@ -20,7 +20,4 @@ data class Workout(
     val listOfExercisesID: List<UUID> = emptyList(),
     @ColumnInfo(name = "workout_difficulty")
     val difficulty: Difficulty = Difficulty.MEDIUM,
-    @ColumnInfo(name = "workout_tile_color")
-//    val color: Color = listOf(PurpleOrchid, BlueGray, PinkRosewater)[(0..2).random()]
-    val color: Color = PurpleOrchid
     )
