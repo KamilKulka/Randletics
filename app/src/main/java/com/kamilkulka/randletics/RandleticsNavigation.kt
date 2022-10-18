@@ -7,18 +7,29 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kamilkulka.randletics.screens.exercises.ExercisesScreen
 import com.kamilkulka.randletics.screens.main.MainScreen
+import com.kamilkulka.randletics.screens.main.MainViewModel
 
 @Composable
-fun RandleticsNavigation(modifier: Modifier = Modifier,
-                       startDestination : String = RandleticsScreens.MainScreen.name){
+fun RandleticsNavigation(
+    modifier: Modifier = Modifier,
+    startDestination: String = RandleticsScreens.MainScreen.name
+) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = startDestination){
-
-        composable(RandleticsScreens.MainScreen.name){
-            MainScreen()
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = startDestination
+    ) {
+        composable(RandleticsScreens.MainScreen.name) {
+            MainScreen(onAddWorkout = {
+                //TODO//
+            },
+                onWorkoutClick = {
+                    //TODO//
+                })
         }
 
-        composable(RandleticsScreens.ExercisesListScreen.name){
+        composable(RandleticsScreens.ExercisesListScreen.name) {
             ExercisesScreen()
         }
     }
