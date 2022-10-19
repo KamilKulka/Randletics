@@ -1,13 +1,9 @@
 package com.kamilkulka.randletics.models
 
 
-import androidx.compose.ui.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.kamilkulka.randletics.ui.theme.BlueGray
-import com.kamilkulka.randletics.ui.theme.PinkRosewater
-import com.kamilkulka.randletics.ui.theme.PurpleOrchid
 import java.util.*
 
 @Entity(tableName = "workouts_table")

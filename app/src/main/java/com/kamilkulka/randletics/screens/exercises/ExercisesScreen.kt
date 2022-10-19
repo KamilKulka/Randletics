@@ -13,6 +13,6 @@ fun ExercisesScreen(){
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Greeting("ExercisesSC")
+
     }
 }
