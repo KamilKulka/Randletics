@@ -22,7 +22,7 @@ fun RandleticsNavigation(
     ) {
         composable(RandleticsScreens.MainScreen.name) {
             MainScreen(onAddWorkout = {
-                //TODO//
+                navController.navigate("NewWorkoutScreen")
             },
                 onWorkoutClick = {
                     //TODO//

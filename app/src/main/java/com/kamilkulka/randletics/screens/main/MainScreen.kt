@@ -72,9 +72,11 @@ fun MainScreen(
                     items(3) {
                         WorkoutBox()
                     }
-                    item {
-                        AddWorkoutBox(){
-                            onAddWorkout()
+                    if (workoutList.size <4){
+                        item {
+                            AddWorkoutBox(){
+                                onAddWorkout()
+                            }
                         }
                     }
                 }
