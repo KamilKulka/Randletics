@@ -7,8 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kamilkulka.randletics.screens.exercises.ExercisesScreen
 import com.kamilkulka.randletics.screens.main.MainScreen
-import com.kamilkulka.randletics.screens.main.MainViewModel
-import com.kamilkulka.randletics.screens.new_workout.NewWorkoutScreen
+import com.kamilkulka.randletics.screens.newworkout.NewWorkoutScreen
 
 @Composable
 fun RandleticsNavigation(
