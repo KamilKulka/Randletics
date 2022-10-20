@@ -22,9 +22,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.kamilkulka.randletics.R
+import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.models.Workout
+import com.kamilkulka.randletics.screens.new_workout.NewWorkoutScreen
 import com.kamilkulka.randletics.ui.theme.Ivory
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyRose
@@ -32,8 +35,9 @@ import com.kamilkulka.randletics.ui.theme.SageGreen
 
 @Composable
 fun MainScreen(
-    onAddWorkout: () -> Unit,
-    onWorkoutClick: (Workout) -> Unit,
+//    onAddWorkout: () -> Unit,
+//    onWorkoutClick: (Workout) -> Unit,
+    navController: NavController,
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {
@@ -75,7 +79,7 @@ fun MainScreen(
                     if (workoutList.size <4){
                         item {
                             AddWorkoutBox(){
-                                onAddWorkout()
+                                navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
                             }
                         }
                     }
