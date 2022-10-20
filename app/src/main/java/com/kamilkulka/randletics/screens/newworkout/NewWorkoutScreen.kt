@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,54 +25,69 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyRose
+import com.kamilkulka.randletics.ui.theme.Ivory
 import com.kamilkulka.randletics.ui.theme.SageGreen
 
 @Composable
 fun NewWorkoutScreen(
-//    onAddWorkout: () -> Unit,
-//    onDiscardButton: () -> Unit,
     navController: NavController,
     viewModel: NewWorkoutViewModel = hiltViewModel()
 ) {
+
     Scaffold(backgroundColor = DustyRose,
         topBar = {
-        TopAppBar(
-            elevation = 0.dp,
-            contentPadding = PaddingValues(12.dp),
-            backgroundColor = Color.Transparent
-        ) {
-            Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(48.dp)
-                    .clickable {
-                        navController.popBackStack()
-                    })
-            Spacer(modifier = Modifier.size(20.dp))
-            Text(text = "Add Workout")
-        }
-    }) { contentPadding ->
+            TopAppBar(
+                elevation = 0.dp,
+                contentPadding = PaddingValues(12.dp),
+                backgroundColor = Color.Transparent
+            ) {
+                Icon(imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clickable {
+                            navController.popBackStack()
+                        })
+                Spacer(modifier = Modifier.size(20.dp))
+                Text(text = "Add Workout")
+            }
+        }) { contentPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
             item {
-                FillInContentBox(title = "test") {
+                FillInContentBox(title = "Title:") {
                     BasicTextField(textStyle = TextStyle(fontSize = 20.sp),
-                        value = "aa",
-                        onValueChange = {})
+                        value = viewModel.workoutTitle.collectAsState().value,
+                        onValueChange = viewModel::setWorkoutTitle)
+                    Divider()
                 }
             }
             item {
-                FillInContentBox(title = "Difficulty") {
-                    Slider(value = viewModel.difficultySliderState,
-                        onValueChange = {   value ->
-                        viewModel.difficultySliderState = value
-                    },steps = 1, colors = SliderDefaults.colors(
+                FillInContentBox(title = "Difficulty:") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight(), horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Easy")
+                        Text(text = "Medium")
+                        Text(text = "Hard")
+                    }
+                    Slider(
+                        value = viewModel.difficultySliderState,
+                        onValueChange = { value -> viewModel.difficultySliderState = value },
+                        steps = 1,
+                        colors = SliderDefaults.colors(
                             thumbColor = SageGreen,
-                            disabledThumbColor = SageGreen
-                    ))
+                            activeTickColor = Ivory,
+                            inactiveTickColor = Ivory,
+                            activeTrackColor = Ivory,
+                            inactiveTrackColor = Ivory
+                        )
+                    )
                 }
             }
         }
@@ -80,18 +96,21 @@ fun NewWorkoutScreen(
 
 
 @Composable
-fun FillInContentBox(title: String = "", content:@Composable ()-> Unit={}){
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(6.dp)
-        .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
-        .background(Celadon),
+fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+            .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
+            .background(Celadon),
         contentAlignment = Alignment.TopStart
     ) {
-        Column(modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .padding(12.dp)) {
+        Column(
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(12.dp)
+        ) {
             Text(text = title, fontSize = 32.sp, fontWeight = FontWeight.Bold)
             content()
         }
@@ -101,8 +120,8 @@ fun FillInContentBox(title: String = "", content:@Composable ()-> Unit={}){
 
 @Composable
 @Preview(showBackground = true)
-fun FillInContentBoxPreview(){
-    FillInContentBox(title= "Title:")
+fun FillInContentBoxPreview() {
+    FillInContentBox(title = "Title:")
 }
 
 @Composable
