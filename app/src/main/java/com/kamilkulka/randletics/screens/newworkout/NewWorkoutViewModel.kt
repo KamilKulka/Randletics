@@ -20,6 +20,10 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
         _workoutTitle.value = workoutTitle
     }
 
-    var difficultySliderState by mutableStateOf(0f)
+    private val _difficultySlider = MutableStateFlow(0f)
+    var difficultySlider = _difficultySlider.asStateFlow()
 
+    fun setDifficultySlider(sliderValue: Float){
+        _difficultySlider.value = sliderValue
+    }
 }

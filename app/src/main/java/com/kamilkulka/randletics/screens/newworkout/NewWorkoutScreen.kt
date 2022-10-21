@@ -59,9 +59,11 @@ fun NewWorkoutScreen(
         ) {
             item {
                 FillInContentBox(title = "Title:") {
-                    BasicTextField(textStyle = TextStyle(fontSize = 20.sp),
+                    BasicTextField(
+                        textStyle = TextStyle(fontSize = 20.sp),
                         value = viewModel.workoutTitle.collectAsState().value,
-                        onValueChange = viewModel::setWorkoutTitle)
+                        onValueChange = viewModel::setWorkoutTitle
+                    )
                     Divider()
                 }
             }
@@ -77,8 +79,8 @@ fun NewWorkoutScreen(
                         Text(text = "Hard")
                     }
                     Slider(
-                        value = viewModel.difficultySliderState,
-                        onValueChange = { value -> viewModel.difficultySliderState = value },
+                        value = viewModel.difficultySlider.collectAsState().value,
+                        onValueChange = viewModel::setDifficultySlider,
                         steps = 1,
                         colors = SliderDefaults.colors(
                             thumbColor = SageGreen,
@@ -88,6 +90,27 @@ fun NewWorkoutScreen(
                             inactiveTrackColor = Ivory
                         )
                     )
+                }
+
+            }
+            item {
+                FillInContentBox(title = "Equipment:") {
+                    CheckboxWithText(
+                        text = "Resistance Bands",
+                        checked = true,
+                        onCheckedChange = {})
+                    CheckboxWithText(
+                        text = "Dumbells",
+                        checked = true,
+                        onCheckedChange = {})
+                    CheckboxWithText(
+                        text = "Hanging Bar",
+                        checked = true,
+                        onCheckedChange = {})
+                    CheckboxWithText(
+                        text = "Mid Bar",
+                        checked = true,
+                        onCheckedChange = {})
                 }
             }
         }
@@ -118,8 +141,35 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
     }
 }
 
+
 @Composable
 @Preview(showBackground = true)
+fun CheckboxWithText(
+    text: String = "Sample",
+    checked: Boolean = false,
+    onCheckedChange: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { onCheckedChange() },
+            colors = CheckboxDefaults.colors(
+                checkedColor = SageGreen,
+                uncheckedColor = Ivory,
+                checkmarkColor = Ivory
+            )
+        )
+        Text(text = text, fontSize = 18.sp)
+    }
+}
+
+@Composable
+//@Preview(showBackground = true)
 fun FillInContentBoxPreview() {
     FillInContentBox(title = "Title:")
 }
