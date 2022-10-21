@@ -95,22 +95,12 @@ fun NewWorkoutScreen(
             }
             item {
                 FillInContentBox(title = "Equipment:") {
-                    CheckboxWithText(
-                        text = "Resistance Bands",
-                        checked = true,
-                        onCheckedChange = {})
-                    CheckboxWithText(
-                        text = "Dumbells",
-                        checked = true,
-                        onCheckedChange = {})
-                    CheckboxWithText(
-                        text = "Hanging Bar",
-                        checked = true,
-                        onCheckedChange = {})
-                    CheckboxWithText(
-                        text = "Mid Bar",
-                        checked = true,
-                        onCheckedChange = {})
+                    for (equipment in viewModel.equipmentList){
+                        CheckboxWithText(
+                            text = equipment.equipmentName,
+                            checked = equipment.isChecked,
+                            onCheckedChange = {})
+                    }
                 }
             }
         }
