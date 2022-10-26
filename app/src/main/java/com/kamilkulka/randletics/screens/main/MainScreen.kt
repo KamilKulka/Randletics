@@ -17,12 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
+import com.kamilkulka.randletics.models.Workout
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyRose
 import com.kamilkulka.randletics.ui.theme.SageGreen
@@ -65,14 +67,12 @@ fun MainScreen(
                     ),
                     modifier = Modifier.fillMaxHeight()
                 ) {
-//                    items(workoutList.size) { index ->
-//                        WorkoutBox(workout = workoutList[index])
-                    items(3) {
-                        WorkoutBox()
+                    items(workoutList.size) { index ->
+                        WorkoutBox(workout = workoutList[index])
                     }
-                    if (workoutList.size <4){
+                    if (workoutList.size < 4) {
                         item {
-                            AddWorkoutBox(){
+                            AddWorkoutBox() {
                                 navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
                             }
                         }
@@ -81,13 +81,11 @@ fun MainScreen(
             }
         }
     }
-
 }
-
 
 @Composable
 fun WorkoutBox(
-//    workout: Workout
+    workout: Workout
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -117,7 +115,7 @@ fun WorkoutBox(
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
-            Text(text = "Title", modifier = Modifier.align(Alignment.TopStart))
+            Text(text = workout.title, modifier = Modifier.align(Alignment.TopStart))
         }
     }
 }
@@ -141,9 +139,11 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(imageVector = Icons.Sharp.Add,
+            Icon(
+                imageVector = Icons.Sharp.Add,
                 contentDescription = "Add Workout",
-                modifier = Modifier.size(124.dp))
+                modifier = Modifier.size(124.dp)
+            )
             Text(text = "Add Workout")
         }
     }

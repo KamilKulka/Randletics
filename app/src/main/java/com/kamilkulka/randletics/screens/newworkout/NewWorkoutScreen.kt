@@ -98,7 +98,7 @@ fun NewWorkoutScreen(
                     for (equipment in viewModel.equipmentList){
                         CheckboxWithText(
                             text = equipment.equipmentName,
-                            checked = equipment.isChecked,
+                            checked = false,
                             onCheckedChange = {})
                     }
                 }
