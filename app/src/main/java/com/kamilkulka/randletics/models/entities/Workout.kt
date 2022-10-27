@@ -13,10 +13,6 @@ data class Workout(
     val workoutId: UUID = UUID.randomUUID(),
     @ColumnInfo(name = "workout_title")
     val title: String = "My Workout",
-    @ColumnInfo(name = "workout_exercises_id")
-    val listOfExercisesID: List<UUID> = emptyList(),
     @ColumnInfo(name = "workout_difficulty")
     val difficulty: Difficulty = Difficulty.MEDIUM,
-    @ColumnInfo(name = "workout_equipment")
-    val equipmentList: MutableList<Equipment> = mutableListOf<Equipment>()
     )
