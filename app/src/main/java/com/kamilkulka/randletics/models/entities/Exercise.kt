@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.kamilkulka.randletics.models.Difficulty
 import com.kamilkulka.randletics.models.Muscle
 import java.util.*
-@Entity
+@Entity(tableName = "exercise_table")
 data class Exercise(
     @PrimaryKey
     val exerciseId: UUID = UUID.randomUUID(),
