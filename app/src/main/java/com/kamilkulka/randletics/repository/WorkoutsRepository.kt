@@ -1,7 +1,7 @@
 package com.kamilkulka.randletics.repository
 
 import com.kamilkulka.randletics.data.WorkoutDatabaseDao
-import com.kamilkulka.randletics.models.Workout
+import com.kamilkulka.randletics.models.entities.Workout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.conflate

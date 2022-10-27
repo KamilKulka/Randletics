@@ -1,10 +1,7 @@
 package com.kamilkulka.randletics.screens.newworkout
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.kamilkulka.randletics.models.Equipment
+import com.kamilkulka.randletics.models.entities.Equipment
 import com.kamilkulka.randletics.models.EquipmentType
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

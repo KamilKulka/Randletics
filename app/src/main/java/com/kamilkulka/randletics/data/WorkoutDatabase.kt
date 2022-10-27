@@ -3,7 +3,7 @@ package com.kamilkulka.randletics.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.kamilkulka.randletics.models.Workout
+import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.utils.DifficultyConverter
 import com.kamilkulka.randletics.utils.EquipmentListConverter
 import com.kamilkulka.randletics.utils.ExercisesListConverter

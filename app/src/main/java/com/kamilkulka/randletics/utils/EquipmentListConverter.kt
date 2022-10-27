@@ -1,9 +1,8 @@
 package com.kamilkulka.randletics.utils
 
 import androidx.room.TypeConverter
-import com.kamilkulka.randletics.models.Equipment
+import com.kamilkulka.randletics.models.entities.Equipment
 import com.kamilkulka.randletics.models.EquipmentType
-import java.util.*
 import java.util.regex.Pattern
 
 class EquipmentListConverter {
@@ -26,8 +25,10 @@ class EquipmentListConverter {
         val equipmentList: MutableList<Equipment> = mutableListOf<Equipment>()
         for (equipmentString in stringEquipmentList){
             if (equipmentString.isNotBlank()){
-                equipmentList.add(Equipment(
-                    equipmentType = EquipmentType.valueOf(equipmentString)))
+                equipmentList.add(
+                    Equipment(
+                    equipmentType = EquipmentType.valueOf(equipmentString))
+                )
             }
         }
         return equipmentList
