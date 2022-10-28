@@ -11,7 +11,7 @@ data class ExerciseWithEquipment(
     @Embedded val exercise: Exercise,
     @Relation(
         parentColumn = "exerciseId",
-        entityColumn = "equipmentType",
+        entityColumn = "equipmentId",
         associateBy = Junction(ExerciseEquipmentCrossRef::class)
     )
     val equipments: List<Equipment>

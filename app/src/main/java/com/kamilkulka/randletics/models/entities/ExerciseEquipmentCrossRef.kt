@@ -1,11 +1,10 @@
 package com.kamilkulka.randletics.models.entities
 
 import androidx.room.Entity
-import com.kamilkulka.randletics.models.EquipmentType
 import java.util.*
 
-@Entity(primaryKeys = ["exerciseID","equipmentType"])
+@Entity(primaryKeys = ["exerciseId","equipmentId"])
 data class ExerciseEquipmentCrossRef(
-    val exerciseID: UUID,
-    val equipmentType: EquipmentType
+    val exerciseId: UUID,
+    val equipmentId: UUID
 )

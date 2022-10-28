@@ -1,7 +1,6 @@
 package com.kamilkulka.randletics.data
 
 import androidx.room.*
-import com.kamilkulka.randletics.models.EquipmentType
 import com.kamilkulka.randletics.models.entities.*
 import com.kamilkulka.randletics.models.entities.relations.*
 import kotlinx.coroutines.flow.Flow
@@ -24,9 +23,9 @@ interface WorkoutDatabaseDao {
     @Query("SELECT * FROM exercise_table WHERE exerciseId=:id")
     suspend fun getExerciseById(id: String): Exercise
 
-    @Query("SELECT * FROM equipment_table WHERE equipmentType=:equipmentType")
-    suspend fun getEquipmentByType(equipmentType: EquipmentType): EquipmentType
-//TODO: flow for querries below
+    @Query("SELECT * FROM equipment_table WHERE equipmentId=:equipmentId")
+    suspend fun getEquipmentByType(equipmentId: String): Equipment
+
     @Transaction
     @Query("SELECT * FROM workouts_table")
     suspend fun getWorkoutWithEquipments(): List<WorkoutWithEquipment>

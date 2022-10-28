@@ -10,7 +10,7 @@ import com.kamilkulka.randletics.models.entities.ExerciseEquipmentCrossRef
 data class EquipmentWithExercise(
     @Embedded val equipment: Equipment,
     @Relation(
-        parentColumn = "equipmentType",
+        parentColumn = "equipmentId",
         entityColumn = "exerciseId",
         associateBy = Junction(ExerciseEquipmentCrossRef::class)
     )

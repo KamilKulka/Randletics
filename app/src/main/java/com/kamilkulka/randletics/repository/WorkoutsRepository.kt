@@ -13,6 +13,6 @@ class WorkoutsRepository @Inject constructor(private val workoutDatabaseDao: Wor
     suspend fun getWorkoutById(id: String): Workout = workoutDatabaseDao.getWorkoutById(id)
     suspend fun insertWorkout(workout: Workout) = workoutDatabaseDao.insert(workout)
     suspend fun updateWorkout(workout: Workout) = workoutDatabaseDao.update(workout)
-    suspend fun deleteAllWorkouts() = workoutDatabaseDao.deleteAll()
+    suspend fun deleteAllWorkouts() = workoutDatabaseDao.deleteAllWorkouts()
     suspend fun deleteWorkout(workout: Workout) = workoutDatabaseDao.deleteWorkout(workout)
 }

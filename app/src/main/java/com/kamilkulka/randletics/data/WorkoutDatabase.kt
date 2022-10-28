@@ -15,7 +15,7 @@ import com.kamilkulka.randletics.utils.*
         WorkoutEquipmentCrossRef::class,
         WorkoutExerciseCrossRef::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(

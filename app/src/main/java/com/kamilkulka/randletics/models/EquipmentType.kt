@@ -1,7 +1,6 @@
 package com.kamilkulka.randletics.models
 
 enum class EquipmentType() {
-    NO_EQUIPMENT,
     DUMBBELLS,
     BARBELL,
     FLAT_BENCH,
