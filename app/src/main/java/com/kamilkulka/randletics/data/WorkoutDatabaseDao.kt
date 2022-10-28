@@ -2,9 +2,7 @@ package com.kamilkulka.randletics.data
 
 import androidx.room.*
 import com.kamilkulka.randletics.models.EquipmentType
-import com.kamilkulka.randletics.models.entities.Equipment
-import com.kamilkulka.randletics.models.entities.Exercise
-import com.kamilkulka.randletics.models.entities.Workout
+import com.kamilkulka.randletics.models.entities.*
 import com.kamilkulka.randletics.models.entities.relations.*
 import kotlinx.coroutines.flow.Flow
 
@@ -31,36 +29,36 @@ interface WorkoutDatabaseDao {
 //TODO: flow for querries below
     @Transaction
     @Query("SELECT * FROM workouts_table")
-    fun getWorkoutWithEquipments(): List<WorkoutWithEquipment>
+    suspend fun getWorkoutWithEquipments(): List<WorkoutWithEquipment>
 
     @Transaction
     @Query("SELECT * FROM equipment_table")
-    fun getEquipmentWithWorkouts(): List<EquipmentWithWorkout>
+    suspend fun getEquipmentWithWorkouts(): List<EquipmentWithWorkout>
 
     @Transaction
     @Query("SELECT * FROM exercise_table")
-    fun getExerciseWithWorkouts(): List<ExerciseWithWorkout>
+    suspend fun getExerciseWithWorkouts(): List<ExerciseWithWorkout>
 
     @Transaction
     @Query("SELECT * FROM workouts_table")
-    fun getWorkoutWithExercises(): List<WorkoutWithExercise>
+    suspend fun getWorkoutWithExercises(): List<WorkoutWithExercise>
 
     @Transaction
     @Query("SELECT * FROM equipment_table")
-    fun getEquipmentWithExercises(): List<EquipmentWithExercise>
+    suspend fun getEquipmentWithExercises(): List<EquipmentWithExercise>
 
     @Transaction
     @Query("SELECT * FROM exercise_table")
-    fun getExerciseWithEquipments(): List<ExerciseWithEquipment>
+    suspend fun getExerciseWithEquipments(): List<ExerciseWithEquipment>
 
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insert(workout: Workout)
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insert(workout: Workout)
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insert(workout: Workout)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertExerciseEquipmentCrossRef(crossRef: ExerciseEquipmentCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWorkoutEquipmentCrossRef(crossRef: WorkoutEquipmentCrossRef)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWorkoutExerciseCrossRef(crossRef: WorkoutExerciseCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(workout: Workout)
@@ -82,13 +80,13 @@ interface WorkoutDatabaseDao {
 
     @Delete
     suspend fun deleteExercise(exercise: Exercise)
-//
-//    @Delete
-//    suspend fun deleteExercise(exercise: Exercise)
-//
-//    @Delete
-//    suspend fun deleteExercise(exercise: Exercise)
-//
-//    @Delete
-//    suspend fun deleteExercise(exercise: Exercise)
+
+    @Delete
+    suspend fun deleteExerciseEquipmentCrossRef(crossRef: ExerciseEquipmentCrossRef)
+
+    @Delete
+    suspend fun deleteWorkoutEquipmentCrossRef(crossRef: WorkoutEquipmentCrossRef)
+
+    @Delete
+    suspend fun deleteWorkoutExerciseCrossRef(crossRef: WorkoutExerciseCrossRef)
 }

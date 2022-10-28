@@ -7,8 +7,8 @@ import java.util.regex.Pattern
 
 class EquipmentTypeConverter {
     @TypeConverter
-    fun fromEquipmentType(equipmentType: EquipmentType): String = equipmentType.toString()
+    fun fromEquipmentType(equipmentType: EquipmentType): String = equipmentType.name
 
     @TypeConverter
-    fun equipmentTypeFromString(string: String): EquipmentType = EquipmentType.valueOf(string)
+    fun equipmentTypeFromString(string: String): EquipmentType =  EquipmentType.valueOf(string)
 }

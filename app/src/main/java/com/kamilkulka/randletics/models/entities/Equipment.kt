@@ -7,8 +7,8 @@ import com.kamilkulka.randletics.models.EquipmentType
 
 @Entity(tableName = "equipment_table")
 data class Equipment(
-    @PrimaryKey
-    val equipmentType: EquipmentType,
+    @PrimaryKey(autoGenerate = true)
+    val equipmentType: EquipmentType= EquipmentType.NO_EQUIPMENT,
     @ColumnInfo(name = "equipment_name")
     val equipmentName: String = (equipmentType.name.substring(0, 1
     ) + equipmentType.name.substring(1).lowercase()).replace("_"," ")
