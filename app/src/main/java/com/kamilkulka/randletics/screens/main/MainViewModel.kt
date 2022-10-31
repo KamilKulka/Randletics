@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(private val workoutsRepository: Workouts
 
     init{
         viewModelScope.launch(Dispatchers.IO) {
-            workoutsRepository.getAll().distinctUntilChanged().collect(){
+            workoutsRepository.getAllWorkouts().distinctUntilChanged().collect(){
                 listOfWorkouts ->
                 if (listOfWorkouts.isEmpty()){
                     Log.d("Empty","Empty list")

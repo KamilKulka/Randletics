@@ -27,13 +27,14 @@ import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyRose
 import com.kamilkulka.randletics.ui.theme.Ivory
 import com.kamilkulka.randletics.ui.theme.SageGreen
+import kotlinx.coroutines.flow.toList
 
 @Composable
 fun NewWorkoutScreen(
     navController: NavController,
     viewModel: NewWorkoutViewModel = hiltViewModel()
 ) {
-
+    val equipmentList = viewModel.equipmentList.collectAsState().value
     Scaffold(backgroundColor = DustyRose,
         topBar = {
             TopAppBar(
@@ -95,7 +96,7 @@ fun NewWorkoutScreen(
             }
             item {
                 FillInContentBox(title = "Equipment:") {
-                    for (equipment in viewModel.equipmentList){
+                    for (equipment in equipmentList){
                         CheckboxWithText(
                             text = equipment.equipmentName,
                             checked = false,
