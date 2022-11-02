@@ -24,5 +24,5 @@ object AppModule {
     @Provides
     fun provideWorkoutDatabase(@ApplicationContext context: Context): WorkoutDatabase =
         Room.databaseBuilder(context,WorkoutDatabase::class.java,"workouts_db")
-            .fallbackToDestructiveMigration().build()
+            .fallbackToDestructiveMigration().createFromAsset("database/workouts_db.db").build()
 }

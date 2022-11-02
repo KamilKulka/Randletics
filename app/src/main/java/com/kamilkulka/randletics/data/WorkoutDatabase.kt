@@ -16,7 +16,7 @@ import com.kamilkulka.randletics.utils.*
         WorkoutExerciseCrossRef::class
     ],
     version = 4,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(
     UUIDConverter::class,
