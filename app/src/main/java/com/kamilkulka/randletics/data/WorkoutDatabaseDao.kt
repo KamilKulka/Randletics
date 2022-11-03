@@ -17,6 +17,9 @@ interface WorkoutDatabaseDao {
     @Query("SELECT * FROM equipment_table")
     fun getEquipments(): Flow<List<Equipment>>
 
+    @Query("SELECT COUNT(*) FROM equipment_table")
+    suspend fun getEquipmentsNumber(): Int
+
     @Query("SELECT * FROM workouts_table WHERE workoutId=:id")
     suspend fun getWorkoutById(id: String): Workout
 

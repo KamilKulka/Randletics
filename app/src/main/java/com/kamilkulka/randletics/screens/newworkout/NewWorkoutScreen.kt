@@ -1,5 +1,6 @@
 package com.kamilkulka.randletics.screens.newworkout
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,8 +11,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +27,7 @@ import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyRose
 import com.kamilkulka.randletics.ui.theme.Ivory
 import com.kamilkulka.randletics.ui.theme.SageGreen
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.toList
 
 @Composable
@@ -99,8 +100,11 @@ fun NewWorkoutScreen(
                     for (equipment in equipmentList){
                         CheckboxWithText(
                             text = equipment.equipmentName,
-                            checked = false,
-                            onCheckedChange = {})
+                            checked = viewModel.equipmentsState[equipmentList.indexOf(equipment)].collectAsState().value,
+                            onCheckedChange = {
+                                viewModel.equipmentsState[equipmentList.indexOf(equipment)].value=
+                                    !viewModel.equipmentsState[equipmentList.indexOf(equipment)].value
+                            })
                     }
                 }
             }
