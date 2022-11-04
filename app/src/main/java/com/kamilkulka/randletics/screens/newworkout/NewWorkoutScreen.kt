@@ -46,15 +46,14 @@ fun NewWorkoutScreen(
                 contentPadding = PaddingValues(12.dp),
                 backgroundColor = Color.Transparent
             ) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        })
-                Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Add Workout")
+                Row(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 18.dp),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Add Workout", fontSize = 24.sp, color = Color.Black, fontWeight = FontWeight.SemiBold)
+                }
             }
         }) { contentPadding ->
         LazyColumn(
