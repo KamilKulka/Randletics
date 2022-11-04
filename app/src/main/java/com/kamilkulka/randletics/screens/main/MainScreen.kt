@@ -67,7 +67,9 @@ fun MainScreen(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     items(workoutList.size) { index ->
-                        WorkoutBox(workout = workoutList[index])
+                        WorkoutBox(workout = workoutList[index]){
+                            navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name)
+                        }
                     }
                     if (workoutList.size < 4) {
                         item {
@@ -84,7 +86,8 @@ fun MainScreen(
 
 @Composable
 fun WorkoutBox(
-    workout: Workout
+    workout: Workout,
+    onClick: () -> Unit = {}
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -92,6 +95,7 @@ fun WorkoutBox(
             .padding(6.dp)
             .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
             .background(SageGreen)
+            .clickable { onClick() }
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight

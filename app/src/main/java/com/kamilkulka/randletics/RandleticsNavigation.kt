@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kamilkulka.randletics.screens.exercises.ExercisesScreen
 import com.kamilkulka.randletics.screens.main.MainScreen
 import com.kamilkulka.randletics.screens.newworkout.NewWorkoutScreen
+import com.kamilkulka.randletics.screens.preworkout.PreWorkoutScreen
 
 @Composable
 fun RandleticsNavigation(
@@ -26,6 +27,10 @@ fun RandleticsNavigation(
 
         composable(RandleticsScreens.NewWorkoutScreen.name) {
             NewWorkoutScreen(navController = navController)
+        }
+
+        composable(RandleticsScreens.PreWorkoutScreen.name) {
+            PreWorkoutScreen(navController = navController)
         }
 
         composable(RandleticsScreens.ExercisesListScreen.name) {
