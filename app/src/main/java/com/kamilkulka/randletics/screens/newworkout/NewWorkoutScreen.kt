@@ -1,10 +1,12 @@
 package com.kamilkulka.randletics.screens.newworkout
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -16,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,14 +100,62 @@ fun NewWorkoutScreen(
             }
             item {
                 FillInContentBox(title = "Equipment:") {
-                    for (equipment in equipmentList){
+                    for (equipment in equipmentList) {
                         CheckboxWithText(
                             text = equipment.equipmentName,
                             checked = viewModel.equipmentsState[equipmentList.indexOf(equipment)].collectAsState().value,
                             onCheckedChange = {
-                                viewModel.equipmentsState[equipmentList.indexOf(equipment)].value=
+                                viewModel.equipmentsState[equipmentList.indexOf(equipment)].value =
                                     !viewModel.equipmentsState[equipmentList.indexOf(equipment)].value
                             })
+                    }
+                }
+            }
+            item {
+                FillInContentBox() {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(top = 6.dp, start = 6.dp, end = 6.dp, bottom = 0.dp)
+                    ) {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(55.dp)
+                                .clickable {
+                                    viewModel.createWorkout()
+                                    navController.popBackStack()
+                                },
+                            color = SageGreen,
+                            shape = CircleShape
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(text = "Add Workout", fontSize = 24.sp, color = Ivory)
+                            }
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(45.dp)
+                                .padding(8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                modifier = Modifier.clickable {
+                                    navController.popBackStack()
+                                },
+                                text = "Discard Workout",
+                                fontSize = 20.sp,
+                                color = MaterialTheme.colors.error
+                            )
+                        }
                     }
                 }
             }
@@ -129,7 +180,9 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            Text(text = title, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            if (title.isNotEmpty()) {
+                Text(text = title, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+            }
             content()
         }
 
@@ -138,7 +191,6 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
 
 
 @Composable
-@Preview(showBackground = true)
 fun CheckboxWithText(
     text: String = "Sample",
     checked: Boolean = false,
@@ -164,13 +216,11 @@ fun CheckboxWithText(
 }
 
 @Composable
-//@Preview(showBackground = true)
 fun FillInContentBoxPreview() {
     FillInContentBox(title = "Title:")
 }
 
 @Composable
-//@Preview(showBackground = true)
 fun NewWorkoutScreenPreview() {
     Scaffold(topBar = {
         TopAppBar(

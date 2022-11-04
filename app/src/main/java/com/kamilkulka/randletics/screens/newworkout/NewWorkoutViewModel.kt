@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kamilkulka.randletics.models.Difficulty
 import com.kamilkulka.randletics.models.entities.Equipment
+import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -50,5 +52,17 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
 
     fun setDifficultySlider(sliderValue: Float) {
         _difficultySlider.value = sliderValue
+    }
+
+    fun createWorkout(){
+        var workoutDifficulty = Difficulty.MEDIUM
+        if(_difficultySlider.value<0.33f){
+            workoutDifficulty = Difficulty.EASY
+        }else if(_difficultySlider.value>0.67){
+            workoutDifficulty =Difficulty.HARD
+        }
+        viewModelScope.launch {
+            workoutsRepository.insertWorkout(workout = Workout(title = _workoutTitle.value, difficulty = workoutDifficulty))
+        }
     }
 }
