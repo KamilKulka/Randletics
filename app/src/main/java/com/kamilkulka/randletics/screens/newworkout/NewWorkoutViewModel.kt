@@ -6,20 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamilkulka.randletics.models.Difficulty
 import com.kamilkulka.randletics.models.entities.Equipment
+import com.kamilkulka.randletics.models.entities.Exercise
 import com.kamilkulka.randletics.models.entities.Workout
+import com.kamilkulka.randletics.models.entities.relations.EquipmentWithExercise
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: WorkoutsRepository) :
     ViewModel() {
+    private val _exercisesList = MutableStateFlow<List<Exercise>>(emptyList())
+    private val _equipmentsWithExercises =
+        MutableStateFlow<List<EquipmentWithExercise>>(emptyList())
     private val _workoutTitle = MutableStateFlow("")
     var workoutTitle = _workoutTitle.asStateFlow()
 
@@ -48,6 +50,28 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
                     }
                 }
         }
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getAllExercises().distinctUntilChanged()
+                .collect { listOfExercises ->
+                    if (listOfExercises.isEmpty()) {
+                        Log.d("Empty", "Exercises list is empty!")
+                    } else {
+                        _exercisesList.value = listOfExercises
+                        Log.d("Exercises", "Init")
+                    }
+                }
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getAllEquipmentsWithExercises().distinctUntilChanged()
+                .collect() { listOfEquipmentsWithExercises ->
+                    if (listOfEquipmentsWithExercises.isEmpty()) {
+                        Log.d("Empty", "EquipmentsWithExercises list is empty!")
+                    } else {
+                        _equipmentsWithExercises.value = listOfEquipmentsWithExercises
+                        Log.d("EquipmentsWithExercises", "Init")
+                    }
+                }
+        }
     }
 
     fun setWorkoutTitle(workoutTitle: String) {
@@ -59,19 +83,58 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
     }
 
     fun createWorkout() {
-        var workoutDifficulty = Difficulty.MEDIUM
-        if (_difficultySlider.value < 0.33f) {
-            workoutDifficulty = Difficulty.EASY
+        val exercisesList = mutableListOf<Exercise>()
+        val workoutDifficulty = if (_difficultySlider.value < 0.33f) {
+            Difficulty.EASY
         } else if (_difficultySlider.value > 0.67) {
-            workoutDifficulty = Difficulty.HARD
+            Difficulty.HARD
+        } else Difficulty.MEDIUM
+
+        for (equipment in _equipmentList.value) {
+            Log.d("Equipment", ": ${equipment.equipmentName}")
         }
-        viewModelScope.launch {
-            workoutsRepository.insertWorkout(
-                workout = Workout(
-                    title = _workoutTitle.value,
-                    difficulty = workoutDifficulty
-                )
-            )
+
+        when (workoutDifficulty) {
+            Difficulty.EASY -> {
+
+            }
+            Difficulty.MEDIUM -> {
+
+            }
+            Difficulty.HARD -> {
+
+            }
+        }
+
+//        viewModelScope.launch {
+//            workoutsRepository.insertWorkout(
+//                workout = Workout(
+//                    title = _workoutTitle.value,
+//                    difficulty = workoutDifficulty
+//                )
+//            )
+//        }
+    }
+
+    private fun addNumOfExercisesToCollection(
+        collection: MutableList<Exercise>,
+        quantity: Int = 1,
+        difficulty: Difficulty = Difficulty.HARD
+    ) {
+        if (quantity > 0) {
+            for (i in 0..quantity) {
+                when (difficulty) {
+                    Difficulty.EASY -> {
+
+                    }
+                    Difficulty.MEDIUM -> {
+
+                    }
+                    Difficulty.HARD -> {
+
+                    }
+                }
+            }
         }
     }
 }
