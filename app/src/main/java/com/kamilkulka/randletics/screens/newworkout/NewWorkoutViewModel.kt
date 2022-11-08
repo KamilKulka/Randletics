@@ -1,19 +1,18 @@
 package com.kamilkulka.randletics.screens.newworkout
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamilkulka.randletics.models.Difficulty
-import com.kamilkulka.randletics.models.entities.Equipment
-import com.kamilkulka.randletics.models.entities.Exercise
-import com.kamilkulka.randletics.models.entities.Workout
+import com.kamilkulka.randletics.models.Muscle
+import com.kamilkulka.randletics.models.entities.*
 import com.kamilkulka.randletics.models.entities.relations.EquipmentWithExercise
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,6 +72,25 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
                 }
         }
     }
+    private fun addExercisesToCollection(
+        collectionFrom: MutableList<Exercise>,
+        collectionTo: MutableList<Exercise>,
+        muscleGroup: Muscle,
+        difficulty: Difficulty = Difficulty.HARD,
+        quantity: Int = 1,
+    ) {
+        val listOfExercisesForMuscle =
+            collectionFrom.filter { exercise -> exercise.muscleGroup == muscleGroup && when(difficulty){
+                Difficulty.EASY -> exercise.difficulty==Difficulty.EASY
+                Difficulty.MEDIUM ->exercise.difficulty==Difficulty.EASY || exercise.difficulty==Difficulty.MEDIUM
+                Difficulty.HARD ->exercise.difficulty==Difficulty.EASY || exercise.difficulty==Difficulty.MEDIUM || exercise.difficulty==Difficulty.HARD
+            } }
+        if (quantity <= listOfExercisesForMuscle.size && quantity > 0) {
+            collectionTo.addAll(
+                listOfExercisesForMuscle.asSequence().shuffled().take(quantity).toList()
+            )
+        } else collectionTo.addAll(listOfExercisesForMuscle)
+    }
 
     fun setWorkoutTitle(workoutTitle: String) {
         _workoutTitle.value = workoutTitle
@@ -83,56 +101,214 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
     }
 
     fun createWorkout() {
-        val exercisesList = mutableListOf<Exercise>()
+        val workoutUUID = UUID.randomUUID()
+        val intermediateExercisesList = _exercisesList.value.toMutableList()
+        val finalExercisesList = mutableListOf<Exercise>()
         val workoutDifficulty = if (_difficultySlider.value < 0.33f) {
             Difficulty.EASY
         } else if (_difficultySlider.value > 0.67) {
             Difficulty.HARD
         } else Difficulty.MEDIUM
 
+        //Removing exercises used unchecked equipment
         for (equipment in _equipmentList.value) {
-            Log.d("Equipment", ": ${equipment.equipmentName}")
-        }
+            val index = _equipmentList.value.indexOf(equipment)
 
+            if (!equipmentsState[index].value) {
+
+                //searching for listToRemove
+                var exercisesToRemove = emptyList<Exercise>()
+                for (equipmentWithExercise in _equipmentsWithExercises.value) {
+                    if (equipmentWithExercise.equipment.equipmentId == equipment.equipmentId) {
+                        exercisesToRemove = equipmentWithExercise.exercises
+                    }
+                }
+
+                //removing exercises(listToRemove) from exercisesList
+                if (exercisesToRemove.isNotEmpty()) {
+                    for (exerciseToRemove in exercisesToRemove) {
+                        intermediateExercisesList.remove(exerciseToRemove)
+                    }
+                }
+            }
+        }
+        //Inserting random exercises to finalExercisesList
         when (workoutDifficulty) {
             Difficulty.EASY -> {
-
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BACK,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CHEST,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.SHOULDERS,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.TRICEPS,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BICEPS,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.LEGS,
+                    difficulty = Difficulty.EASY,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CORE,
+                    difficulty = Difficulty.EASY,
+                    quantity = 1
+                )
             }
             Difficulty.MEDIUM -> {
-
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BACK,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CHEST,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.SHOULDERS,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.TRICEPS,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BICEPS,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 2
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.LEGS,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CORE,
+                    difficulty = Difficulty.MEDIUM,
+                    quantity = 2
+                )
             }
             Difficulty.HARD -> {
-
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BACK,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CHEST,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.SHOULDERS,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.TRICEPS,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.BICEPS,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.LEGS,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
+                addExercisesToCollection(
+                    collectionFrom = intermediateExercisesList,
+                    collectionTo = finalExercisesList,
+                    muscleGroup = Muscle.CORE,
+                    difficulty = Difficulty.HARD,
+                    quantity = 3
+                )
             }
         }
 
-//        viewModelScope.launch {
-//            workoutsRepository.insertWorkout(
-//                workout = Workout(
-//                    title = _workoutTitle.value,
-//                    difficulty = workoutDifficulty
-//                )
-//            )
-//        }
-    }
 
-    private fun addNumOfExercisesToCollection(
-        collection: MutableList<Exercise>,
-        quantity: Int = 1,
-        difficulty: Difficulty = Difficulty.HARD
-    ) {
-        if (quantity > 0) {
-            for (i in 0..quantity) {
-                when (difficulty) {
-                    Difficulty.EASY -> {
+        viewModelScope.launch {
+            workoutsRepository.insertWorkout(
+                workout = Workout(
+                    workoutId=workoutUUID,
+                    title = _workoutTitle.value,
+                    difficulty = workoutDifficulty
+                )
+            )
+            for (exercise in finalExercisesList){
+                workoutsRepository.insertWorkoutExercise(
+                    WorkoutExerciseCrossRef(workoutUUID,exercise.exerciseId))
+            }
+            for (equipment in _equipmentList.value){
+                val index = _equipmentList.value.indexOf(equipment)
 
-                    }
-                    Difficulty.MEDIUM -> {
-
-                    }
-                    Difficulty.HARD -> {
-
-                    }
+                if (equipmentsState[index].value){
+                    workoutsRepository.insertWorkoutEquipment(
+                        WorkoutEquipmentCrossRef(workoutUUID,equipment.equipmentId)
+                    )
                 }
             }
         }
