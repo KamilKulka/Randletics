@@ -1,9 +1,7 @@
 package com.kamilkulka.randletics.repository
 
 import com.kamilkulka.randletics.data.WorkoutDatabaseDao
-import com.kamilkulka.randletics.models.entities.Equipment
-import com.kamilkulka.randletics.models.entities.Exercise
-import com.kamilkulka.randletics.models.entities.Workout
+import com.kamilkulka.randletics.models.entities.*
 import com.kamilkulka.randletics.models.entities.relations.EquipmentWithExercise
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,4 +20,6 @@ class WorkoutsRepository @Inject constructor(private val workoutDatabaseDao: Wor
     suspend fun deleteAllWorkouts() = workoutDatabaseDao.deleteAllWorkouts()
     suspend fun deleteWorkout(workout: Workout) = workoutDatabaseDao.deleteWorkout(workout)
     suspend fun getEquipmentsNumber(): Int = workoutDatabaseDao.getEquipmentsNumber()
+    suspend fun insertWorkoutExercise(crossRef: WorkoutExerciseCrossRef) = workoutDatabaseDao.insertWorkoutExerciseCrossRef(crossRef)
+    suspend fun insertWorkoutEquipment(crossRef: WorkoutEquipmentCrossRef)= workoutDatabaseDao.insertWorkoutEquipmentCrossRef(crossRef)
 }
