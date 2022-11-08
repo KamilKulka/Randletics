@@ -39,7 +39,11 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
                         Log.d("Empty", "Equipment list is empty!")
                     } else {
                         _equipmentList.value = listOfEquipments
-                        for (i in 1..listOfEquipments.size) equipmentsState.add(MutableStateFlow(true))
+                        for (i in 1..listOfEquipments.size) equipmentsState.add(
+                            MutableStateFlow(
+                                true
+                            )
+                        )
                         Log.d("Equipment", "Init")
                     }
                 }
@@ -54,15 +58,20 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
         _difficultySlider.value = sliderValue
     }
 
-    fun createWorkout(){
+    fun createWorkout() {
         var workoutDifficulty = Difficulty.MEDIUM
-        if(_difficultySlider.value<0.33f){
+        if (_difficultySlider.value < 0.33f) {
             workoutDifficulty = Difficulty.EASY
-        }else if(_difficultySlider.value>0.67){
-            workoutDifficulty =Difficulty.HARD
+        } else if (_difficultySlider.value > 0.67) {
+            workoutDifficulty = Difficulty.HARD
         }
         viewModelScope.launch {
-            workoutsRepository.insertWorkout(workout = Workout(title = _workoutTitle.value, difficulty = workoutDifficulty))
+            workoutsRepository.insertWorkout(
+                workout = Workout(
+                    title = _workoutTitle.value,
+                    difficulty = workoutDifficulty
+                )
+            )
         }
     }
 }

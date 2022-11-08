@@ -7,11 +7,11 @@ enum class RandleticsScreens {
     PreWorkoutScreen;
     companion object{
         fun fromRoute(route: String?): RandleticsScreens =
-            when(route){
+            when(route?.substringBefore("/")){
                 MainScreen.name -> MainScreen
                 NewWorkoutScreen.name -> NewWorkoutScreen
                 ExercisesListScreen.name -> ExercisesListScreen
-                PreWorkoutScreen.name -> PreWorkoutScreen
+                PreWorkoutScreen.name  -> PreWorkoutScreen
                 null -> MainScreen
                 else -> throw IllegalArgumentException("$route - no screen found.")
             }

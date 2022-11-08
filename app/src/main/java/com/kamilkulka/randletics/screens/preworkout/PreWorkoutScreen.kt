@@ -11,10 +11,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.ui.theme.DustyRose
+import java.util.*
 
 @Composable
 fun PreWorkoutScreen(
+    workoutId: UUID,
     navController: NavController,
     viewModel: PreWorkoutViewModel = hiltViewModel()
 ) {
@@ -34,6 +37,7 @@ fun PreWorkoutScreen(
                         })
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Main Screen")
+                Text(text = "UUID: $workoutId")
             }
         }) { contentPadding ->
         Text(

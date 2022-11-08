@@ -15,6 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val workoutsRepository: WorkoutsRepository): ViewModel() {
+
+    companion object {
+        const val TAG = "MainViewModel"
+    }
+
     private val _workoutsList = MutableStateFlow<List<Workout>>(emptyList())
     val workoutsList = _workoutsList.asStateFlow()
 
@@ -23,7 +28,7 @@ class MainViewModel @Inject constructor(private val workoutsRepository: Workouts
             workoutsRepository.getAllWorkouts().distinctUntilChanged().collect(){
                 listOfWorkouts ->
                 if (listOfWorkouts.isEmpty()){
-                    Log.d("Empty","Empty list")
+                    Log.d(TAG,"Empty list")
                 }else{
                     _workoutsList.value=listOfWorkouts
                 }

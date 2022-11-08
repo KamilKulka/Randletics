@@ -68,7 +68,7 @@ fun MainScreen(
                 ) {
                     items(workoutList.size) { index ->
                         WorkoutBox(workout = workoutList[index]){
-                            navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name)
+                            navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name + "/${workoutList[index].workoutId}")
                         }
                     }
                     if (workoutList.size < 4) {
