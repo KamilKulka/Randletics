@@ -37,11 +37,12 @@ fun PreWorkoutScreen(
                         })
                 Spacer(modifier = Modifier.size(20.dp))
                 Text(text = "Main Screen")
-                Text(text = "UUID: $workoutId")
             }
         }) { contentPadding ->
         Text(
             modifier = Modifier.padding(contentPadding), text = "Pre Workout Screen"
         )
+        Text(text = "UUID: $workoutId")
+
     }
 }
