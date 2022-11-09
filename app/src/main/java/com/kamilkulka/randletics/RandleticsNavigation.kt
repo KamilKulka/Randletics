@@ -1,12 +1,10 @@
 package com.kamilkulka.randletics
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -24,34 +22,39 @@ fun RandleticsNavigation(
     modifier: Modifier = Modifier,
     startDestination: String = RandleticsScreens.MainScreen.name
 ) {
+
     val navController = rememberAnimatedNavController()
+
     AnimatedNavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
+        val animationDuration = 350
         composable(route = RandleticsScreens.MainScreen.name,
             exitTransition = {
                 when (targetState.destination.route) {
                     "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideOutOfContainer(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.Start
                     )
-                    else -> null
-                }
-            }, enterTransition = {
-                when (initialState.destination.route) {
-                    "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideIntoContainer(
-                        animationSpec = tween(durationMillis = 300),
-                        towards = AnimatedContentScope.SlideDirection.End
+                    RandleticsScreens.NewWorkoutScreen.name -> fadeOut(
+                        animationSpec = snap(
+                            delayMillis = animationDuration
+                        )
                     )
                     else -> null
                 }
             }, popEnterTransition = {
                 when (initialState.destination.route) {
                     "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideIntoContainer(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.End
+                    )
+                    RandleticsScreens.NewWorkoutScreen.name -> fadeIn(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        )
                     )
                     else -> null
                 }
@@ -59,7 +62,35 @@ fun RandleticsNavigation(
             MainScreen(navController = navController)
         }
 
-        composable(RandleticsScreens.NewWorkoutScreen.name) {
+        composable(
+            route = RandleticsScreens.NewWorkoutScreen.name,
+            enterTransition = {
+                when (initialState.destination.route) {
+                    RandleticsScreens.MainScreen.name -> scaleIn(
+                        animationSpec = tween(
+                            durationMillis = animationDuration
+                        ),
+                        transformOrigin = TransformOrigin(
+                            pivotFractionX = 0.5f,
+                            pivotFractionY = 0.75f
+                        )
+                    )
+                    else -> null
+                }
+            },
+            popExitTransition = {
+                when (targetState.destination.route) {
+                    RandleticsScreens.MainScreen.name -> scaleOut(
+                        animationSpec = tween(durationMillis = animationDuration),
+                        transformOrigin = TransformOrigin(
+                            pivotFractionX = 0.5f,
+                            pivotFractionY = 0.75f
+                        )
+                    )
+                    else -> null
+                }
+            }
+        ) {
             NewWorkoutScreen(navController = navController)
         }
 
@@ -70,7 +101,7 @@ fun RandleticsNavigation(
             }), exitTransition = {
                 when (targetState.destination.route) {
                     RandleticsScreens.MainScreen.name -> slideOutOfContainer(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.End
                     )
                     else -> null
@@ -78,7 +109,7 @@ fun RandleticsNavigation(
             }, enterTransition = {
                 when (initialState.destination.route) {
                     RandleticsScreens.MainScreen.name -> slideIntoContainer(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.Start
                     )
                     else -> null
@@ -86,7 +117,7 @@ fun RandleticsNavigation(
             }, popEnterTransition = {
                 when (initialState.destination.route) {
                     RandleticsScreens.MainScreen.name -> slideIntoContainer(
-                        animationSpec = tween(durationMillis = 300),
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.Start
                     )
                     else -> null
