@@ -35,4 +35,8 @@ class MainViewModel @Inject constructor(private val workoutsRepository: Workouts
             }
         }
     }
+  // TODO function returning number of exercises of workout
+//    fun countExercises(workout: Workout): Int{
+//        return
+//    }
 }

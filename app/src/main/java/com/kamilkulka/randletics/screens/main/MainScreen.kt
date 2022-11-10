@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -116,10 +119,27 @@ fun WorkoutBox(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp)
+                .padding(12.dp),
+            contentAlignment = Alignment.TopEnd
         ) {
-            Text(text = workout.title, modifier = Modifier.align(Alignment.TopStart))
+            Text(text = workout.title, modifier = Modifier.align(Alignment.TopStart), color = DustyGreen)
         }
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp), verticalArrangement = Arrangement.Bottom) {
+                Row(modifier = Modifier.wrapContentSize()) {
+                    Icon(imageVector = Icons.Filled.Leaderboard , contentDescription = "Difficulty")
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = workout.difficulty.name)
+                }
+                Row(modifier = Modifier.wrapContentSize()) {
+                    Icon(imageVector = Icons.Filled.FitnessCenter , contentDescription = "Difficulty")
+                    Spacer(modifier = Modifier.size(8.dp))
+                    //TODO number of exercises
+                    Text(text = "12")
+                }
+            }
+
     }
 }
 
