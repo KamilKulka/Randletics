@@ -3,6 +3,7 @@ package com.kamilkulka.randletics.repository
 import com.kamilkulka.randletics.data.WorkoutDatabaseDao
 import com.kamilkulka.randletics.models.entities.*
 import com.kamilkulka.randletics.models.entities.relations.EquipmentWithExercise
+import com.kamilkulka.randletics.models.entities.relations.WorkoutWithEquipment
 import com.kamilkulka.randletics.models.entities.relations.WorkoutWithExercise
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,7 @@ class WorkoutsRepository @Inject constructor(private val workoutDatabaseDao: Wor
     fun getAllExercises(): Flow<List<Exercise>> = workoutDatabaseDao.getExercises().flowOn(Dispatchers.IO).conflate()
     fun getAllEquipmentsWithExercises(): Flow<List<EquipmentWithExercise>> = workoutDatabaseDao.getEquipmentWithExercises().flowOn(Dispatchers.IO).conflate()
     fun getAllWorkoutsWithAllExercises(): Flow<List<WorkoutWithExercise>> = workoutDatabaseDao.getWorkoutsWithExercises().flowOn(Dispatchers.IO).conflate()
+    fun getAllWorkoutsWithEquipments(): Flow<List<WorkoutWithEquipment>> = workoutDatabaseDao.getWorkoutWithEquipments().flowOn(Dispatchers.IO).conflate()
     suspend fun getWorkoutById(id: String): Workout = workoutDatabaseDao.getWorkoutById(id)
     suspend fun insertWorkout(workout: Workout) = workoutDatabaseDao.insert(workout)
     suspend fun updateWorkout(workout: Workout) = workoutDatabaseDao.update(workout)

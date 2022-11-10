@@ -31,7 +31,7 @@ interface WorkoutDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM workouts_table")
-    suspend fun getWorkoutWithEquipments(): List<WorkoutWithEquipment>
+    fun getWorkoutWithEquipments(): Flow<List<WorkoutWithEquipment>>
 
     @Transaction
     @Query("SELECT * FROM equipment_table")
