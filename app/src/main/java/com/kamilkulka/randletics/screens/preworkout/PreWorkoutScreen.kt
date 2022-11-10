@@ -136,7 +136,22 @@ fun PreWorkoutScreen(
                 }
             }
         }
-
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(76.dp)
+                    .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
+                    .clickable {
+                               //TODO: Navigate to Workout Screen and Begin Workout
+                    },
+                shape = CircleShape
+            ) {
+                Box(modifier=Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Start Workout", fontSize = 24.sp)
+                }
+            }
+        }
     }
 
 
