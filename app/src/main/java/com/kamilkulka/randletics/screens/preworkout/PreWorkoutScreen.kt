@@ -45,26 +45,34 @@ fun PreWorkoutScreen(
             }
         }) { contentPadding ->
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(contentPadding)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        DustyGreen, SageGreen
-                    ), startY = 200f, endY = 600f
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            DustyGreen, SageGreen
+                        ), startY = 200f, endY = 600f
+                    )
                 )
-            )) {
-                Box(modifier = Modifier
+        ) {
+            Box(
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(210.dp),
-                    contentAlignment = Alignment.Center){
-                    Text(text = "Title", fontSize = 34.sp, fontWeight = FontWeight.SemiBold)
-                }
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = viewModel.getWorkoutFromUUID(workoutId).title,
+                    fontSize = 34.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
 
 
     }
 
 
-    }
+}
