@@ -102,6 +102,7 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
 
     fun createWorkout() {
         val workoutUUID = UUID.randomUUID()
+        val title = if (_workoutTitle.value.isBlank()) "New Workout" else _workoutTitle.value
         val intermediateExercisesList = _exercisesList.value.toMutableList()
         val finalExercisesList = mutableListOf<Exercise>()
         val workoutDifficulty = if (_difficultySlider.value < 0.33f) {
@@ -294,7 +295,7 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
             workoutsRepository.insertWorkout(
                 workout = Workout(
                     workoutId=workoutUUID,
-                    title = _workoutTitle.value,
+                    title = title,
                     difficulty = workoutDifficulty
                 )
             )
