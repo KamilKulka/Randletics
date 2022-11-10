@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Leaderboard
 import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +36,7 @@ import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.utils.RowWithIcon
 
 @Composable
 fun MainScreen(
@@ -75,7 +77,7 @@ fun MainScreen(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     items(workoutList.size) { index ->
-                        WorkoutBox(workout = workoutList[index], viewModel = viewModel){
+                        WorkoutBox(workout = workoutList[index], viewModel = viewModel) {
                             navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name + "/${workoutList[index].workoutId}")
                         }
                     }
@@ -127,22 +129,24 @@ fun WorkoutBox(
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
-            Text(text = workout.title, modifier = Modifier,fontSize = 20.sp, color = DustyGreen)
+            Text(text = workout.title, modifier = Modifier, fontSize = 20.sp, color = DustyGreen)
         }
-            Column(modifier = Modifier
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp), verticalArrangement = Arrangement.Bottom) {
-                Row(modifier = Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(modifier = Modifier.size(32.dp),imageVector = Icons.Rounded.Leaderboard , contentDescription = "Difficulty")
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = workout.difficulty.name, fontSize = 20.sp)
-                }
-                Row(modifier = Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(modifier = Modifier.size(32.dp),imageVector = Icons.Rounded.SettingsAccessibility , contentDescription = "Difficulty")
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = "${viewModel.countExercisesOf(workout)}", fontSize = 20.sp)
-                }
-            }
+                .padding(12.dp), verticalArrangement = Arrangement.Bottom
+        ) {
+            RowWithIcon(
+                imageVector = Icons.Rounded.Leaderboard,
+                text = workout.difficulty.name,
+                contentDescription = "Difficulty",
+            )
+            RowWithIcon(
+                imageVector = Icons.Rounded.SettingsAccessibility,
+                text = viewModel.countExercisesOf(workout).toString(),
+                contentDescription = "Exercises",
+            )
+        }
 
     }
 }
@@ -167,7 +171,7 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Sharp.Add,
+                imageVector = Icons.Rounded.Add,
                 contentDescription = "Add Workout",
                 modifier = Modifier.size(124.dp)
             )

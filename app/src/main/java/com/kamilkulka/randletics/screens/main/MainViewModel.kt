@@ -31,11 +31,11 @@ class MainViewModel @Inject constructor(private val workoutsRepository: Workouts
     init {
         viewModelScope.launch(Dispatchers.IO) {
             workoutsRepository.getAllWorkoutsWithAllExercises().distinctUntilChanged()
-                .collect() { listOfAllWorkoutsWithAllExercises ->
-                    if (listOfAllWorkoutsWithAllExercises.isEmpty()) {
+                .collect() { listOfAllWorkoutsWithExercises ->
+                    if (listOfAllWorkoutsWithExercises.isEmpty()) {
                         Log.d(TAG, "Empty AllWorkoutsWithExercises list")
                     } else {
-                        _workoutsWithExercises.value = listOfAllWorkoutsWithAllExercises
+                        _workoutsWithExercises.value = listOfAllWorkoutsWithExercises
                     }
                 }
         }
