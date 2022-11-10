@@ -25,7 +25,7 @@ import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.ui.theme.Celadon
-import com.kamilkulka.randletics.ui.theme.DustyRose
+import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
 
 @Composable
@@ -42,7 +42,7 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            color = DustyRose
+            color = DustyGreen
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 Image(
@@ -138,7 +138,7 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DustyRose),
+                .background(DustyGreen),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

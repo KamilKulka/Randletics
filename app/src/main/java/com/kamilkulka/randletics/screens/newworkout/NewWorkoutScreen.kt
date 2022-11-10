@@ -1,7 +1,5 @@
 package com.kamilkulka.randletics.screens.newworkout
 
-import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,20 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.ui.theme.Celadon
-import com.kamilkulka.randletics.ui.theme.DustyRose
-import com.kamilkulka.randletics.ui.theme.Ivory
+import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.toList
 
 @Composable
 fun NewWorkoutScreen(
@@ -39,7 +32,7 @@ fun NewWorkoutScreen(
     viewModel: NewWorkoutViewModel = hiltViewModel()
 ) {
     val equipmentList = viewModel.equipmentList.collectAsState().value
-    Scaffold(backgroundColor = DustyRose,
+    Scaffold(backgroundColor = DustyGreen,
         topBar = {
             TopAppBar(
                 elevation = 0.dp,
@@ -88,10 +81,10 @@ fun NewWorkoutScreen(
                         steps = 1,
                         colors = SliderDefaults.colors(
                             thumbColor = SageGreen,
-                            activeTickColor = Ivory,
-                            inactiveTickColor = Ivory,
-                            activeTrackColor = Ivory,
-                            inactiveTrackColor = Ivory
+                            activeTickColor = DustyGreen,
+                            inactiveTickColor = DustyGreen,
+                            activeTrackColor = DustyGreen,
+                            inactiveTrackColor = DustyGreen
                         )
                     )
                 }
@@ -135,7 +128,7 @@ fun NewWorkoutScreen(
                                     .padding(8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = "Add Workout", fontSize = 24.sp, color = Ivory)
+                                Text(text = "Add Workout", fontSize = 24.sp, color = DustyGreen)
                             }
                         }
 
@@ -206,8 +199,8 @@ fun CheckboxWithText(
             onCheckedChange = { onCheckedChange() },
             colors = CheckboxDefaults.colors(
                 checkedColor = SageGreen,
-                uncheckedColor = Ivory,
-                checkmarkColor = Ivory
+                uncheckedColor = DustyGreen,
+                checkmarkColor = DustyGreen
             )
         )
         Text(text = text, fontSize = 18.sp)

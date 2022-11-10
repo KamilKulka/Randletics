@@ -1,18 +1,23 @@
 package com.kamilkulka.randletics.screens.preworkout
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.kamilkulka.randletics.models.entities.Workout
-import com.kamilkulka.randletics.ui.theme.DustyRose
+import com.kamilkulka.randletics.ui.theme.DustyGreen
+import com.kamilkulka.randletics.ui.theme.SageGreen
 import java.util.*
 
 @Composable
@@ -21,7 +26,7 @@ fun PreWorkoutScreen(
     navController: NavController,
     viewModel: PreWorkoutViewModel = hiltViewModel()
 ) {
-    Scaffold(backgroundColor = DustyRose,
+    Scaffold(backgroundColor = DustyGreen,
         topBar = {
             TopAppBar(
                 elevation = 0.dp,
@@ -39,10 +44,27 @@ fun PreWorkoutScreen(
                 Text(text = "Main Screen")
             }
         }) { contentPadding ->
-        Text(
-            modifier = Modifier.padding(contentPadding), text = "Pre Workout Screen"
-        )
-        Text(text = "UUID: $workoutId")
+
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        DustyGreen, SageGreen
+                    ), startY = 200f, endY = 600f
+                )
+            )) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(210.dp),
+                    contentAlignment = Alignment.Center){
+                    Text(text = "Title", fontSize = 34.sp, fontWeight = FontWeight.SemiBold)
+                }
+        }
+
 
     }
-}
+
+
+    }
