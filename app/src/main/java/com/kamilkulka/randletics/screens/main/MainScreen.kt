@@ -19,9 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.material.icons.filled.Leaderboard
+import androidx.compose.material.icons.rounded.Leaderboard
+import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.kamilkulka.randletics.R
@@ -70,7 +75,7 @@ fun MainScreen(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     items(workoutList.size) { index ->
-                        WorkoutBox(workout = workoutList[index]){
+                        WorkoutBox(workout = workoutList[index], viewModel = viewModel){
                             navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name + "/${workoutList[index].workoutId}")
                         }
                     }
@@ -89,6 +94,7 @@ fun MainScreen(
 
 @Composable
 fun WorkoutBox(
+    viewModel: MainViewModel,
     workout: Workout,
     onClick: () -> Unit = {}
 ) {
@@ -103,7 +109,7 @@ fun WorkoutBox(
         val width = constraints.maxWidth
         val height = constraints.maxHeight
 
-        val startColorPoint = Offset(0f, height * 0.2f)
+        val startColorPoint = Offset(0f, height * 0.35f)
         val endColorPoint = Offset(width.toFloat(), height * 0.6f)
         //ColoredPath
         val colorLayerPath = Path().apply {
@@ -119,24 +125,22 @@ fun WorkoutBox(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(12.dp),
-            contentAlignment = Alignment.TopEnd
+                .padding(12.dp)
         ) {
-            Text(text = workout.title, modifier = Modifier.align(Alignment.TopStart), color = DustyGreen)
+            Text(text = workout.title, modifier = Modifier,fontSize = 20.sp, color = DustyGreen)
         }
             Column(modifier = Modifier
                 .fillMaxSize()
                 .padding(12.dp), verticalArrangement = Arrangement.Bottom) {
-                Row(modifier = Modifier.wrapContentSize()) {
-                    Icon(imageVector = Icons.Filled.Leaderboard , contentDescription = "Difficulty")
+                Row(modifier = Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(modifier = Modifier.size(32.dp),imageVector = Icons.Rounded.Leaderboard , contentDescription = "Difficulty")
                     Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = workout.difficulty.name)
+                    Text(text = workout.difficulty.name, fontSize = 20.sp)
                 }
-                Row(modifier = Modifier.wrapContentSize()) {
-                    Icon(imageVector = Icons.Filled.FitnessCenter , contentDescription = "Difficulty")
+                Row(modifier = Modifier.wrapContentSize(), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(modifier = Modifier.size(32.dp),imageVector = Icons.Rounded.SettingsAccessibility , contentDescription = "Difficulty")
                     Spacer(modifier = Modifier.size(8.dp))
-                    //TODO number of exercises
-                    Text(text = "12")
+                    Text(text = "${viewModel.countExercisesOf(workout)}", fontSize = 20.sp)
                 }
             }
 
