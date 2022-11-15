@@ -71,7 +71,7 @@ fun PreWorkoutScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.getWorkoutFromUUID(workoutId).title,
+                    text = viewModel.workout.collectAsState().value.title,
                     fontSize = 34.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -87,27 +87,26 @@ fun PreWorkoutScreen(
                         .wrapContentSize()
                         .padding(4.dp),
                     imageVector = Icons.Rounded.Leaderboard,
-                    text = "Difficulty: ${viewModel.getDifficultyStringOf(workoutId)}"
+                    text = "Difficulty: ${viewModel.getFormattedDifficulty()}"
                 )
-
 
                 RowWithIcon(
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(4.dp),
                     imageVector = Icons.Rounded.FitnessCenter,
-                    text = viewModel.getEquipmentStringOf(workoutId)
+                    text = viewModel.getAllEquipmentsString()
                 )
-
 
                 RowWithIcon(
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(4.dp),
                     imageVector = Icons.Rounded.SettingsAccessibility,
-                    text = "Exercises: ${viewModel.countExercisesOf(workoutId)}"
+                    text = "Exercises: ${viewModel.countExercisesOf()}"
                 )
-                if (viewModel.countExercisesOf(workoutId) > 0) {
+
+                if (viewModel.countExercisesOf() > 0) {
                     if (viewModel.exercisesDropdown.collectAsState().value) {
                         Icon(imageVector = Icons.Rounded.ExpandLess,
                             contentDescription = "Expand Exercises",
@@ -119,7 +118,7 @@ fun PreWorkoutScreen(
                     }
                     if (viewModel.exercisesDropdown.collectAsState().value) {
                         LazyColumn {
-                            items(items = viewModel.getExercisesList(workoutId)) { exercise ->
+                            items(items = viewModel.exercises.value) { exercise ->
                                 Text(
                                     modifier = Modifier.padding(
                                         start = 20.dp,
@@ -143,11 +142,11 @@ fun PreWorkoutScreen(
                     .height(76.dp)
                     .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
                     .clickable {
-                               //TODO: Navigate to Workout Screen and Begin Workout
+                        //TODO: Navigate to Workout Screen and Begin Workout
                     },
                 shape = CircleShape
             ) {
-                Box(modifier=Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Start Workout", fontSize = 24.sp)
                 }
             }

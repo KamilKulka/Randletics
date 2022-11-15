@@ -34,6 +34,10 @@ interface WorkoutDatabaseDao {
     fun getWorkoutWithEquipments(): Flow<List<WorkoutWithEquipment>>
 
     @Transaction
+    @Query("SELECT * FROM workouts_table WHERE workoutId=:id")
+    fun getWorkoutWithEquipmentsByWorkoutId(id: String): Flow<WorkoutWithEquipment>
+
+    @Transaction
     @Query("SELECT * FROM equipment_table")
     fun getEquipmentWithWorkouts(): Flow<List<EquipmentWithWorkout>>
 
@@ -44,6 +48,10 @@ interface WorkoutDatabaseDao {
     @Transaction
     @Query("SELECT * FROM workouts_table")
     fun getWorkoutsWithExercises(): Flow<List<WorkoutWithExercise>>
+
+    @Transaction
+    @Query("SELECT * FROM workouts_table WHERE workoutId=:id")
+    fun getWorkoutWithExercisesByWorkoutId(id: String): Flow<WorkoutWithExercise>
 
     @Transaction
     @Query("SELECT * FROM equipment_table")
