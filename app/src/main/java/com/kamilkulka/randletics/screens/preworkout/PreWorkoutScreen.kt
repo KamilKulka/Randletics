@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
@@ -29,7 +30,6 @@ import java.util.*
 
 @Composable
 fun PreWorkoutScreen(
-    workoutId: UUID,
     navController: NavController,
     viewModel: PreWorkoutViewModel = hiltViewModel()
 ) {
@@ -142,7 +142,7 @@ fun PreWorkoutScreen(
                     .height(76.dp)
                     .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
                     .clickable {
-                        //TODO: Navigate to Workout Screen and Begin Workout
+                        navController.navigate(route = RandleticsScreens.WorkoutScreen.name + "/${viewModel.workout.value.workoutId}")
                     },
                 shape = CircleShape
             ) {
