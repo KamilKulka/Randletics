@@ -18,16 +18,16 @@ interface WorkoutDatabaseDao {
     fun getEquipments(): Flow<List<Equipment>>
 
     @Query("SELECT COUNT(*) FROM equipment_table")
-    suspend fun getEquipmentsNumber(): Int
+    fun getEquipmentsNumber(): Flow<Int>
 
     @Query("SELECT * FROM workouts_table WHERE workoutId=:id")
-    suspend fun getWorkoutById(id: String): Workout
+    fun getWorkoutById(id: String): Flow<Workout>
 
     @Query("SELECT * FROM exercise_table WHERE exerciseId=:id")
-    suspend fun getExerciseById(id: String): Exercise
+    fun getExerciseById(id: String): Flow<Exercise>
 
     @Query("SELECT * FROM equipment_table WHERE equipmentId=:equipmentId")
-    suspend fun getEquipmentByType(equipmentId: String): Equipment
+    fun getEquipmentByType(equipmentId: String): Flow<Equipment>
 
     @Transaction
     @Query("SELECT * FROM workouts_table")
@@ -35,11 +35,11 @@ interface WorkoutDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM equipment_table")
-    suspend fun getEquipmentWithWorkouts(): List<EquipmentWithWorkout>
+    fun getEquipmentWithWorkouts(): Flow<List<EquipmentWithWorkout>>
 
     @Transaction
     @Query("SELECT * FROM exercise_table")
-    suspend fun getExerciseWithWorkouts(): List<ExerciseWithWorkout>
+    fun getExerciseWithWorkouts(): List<ExerciseWithWorkout>
 
     @Transaction
     @Query("SELECT * FROM workouts_table")
@@ -51,7 +51,7 @@ interface WorkoutDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise_table")
-    suspend fun getExerciseWithEquipments(): List<ExerciseWithEquipment>
+    fun getExerciseWithEquipments(): Flow<List<ExerciseWithEquipment>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseEquipmentCrossRef(crossRef: ExerciseEquipmentCrossRef)
