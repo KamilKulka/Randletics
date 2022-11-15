@@ -15,6 +15,7 @@ import com.kamilkulka.randletics.screens.preworkout.PreWorkoutScreen
 import java.util.*
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.kamilkulka.randletics.screens.workout.WorkoutScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -104,6 +105,9 @@ fun RandleticsNavigation(
                         animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.End
                     )
+                    "${ RandleticsScreens.WorkoutScreen.name }/{workoutId}" -> fadeOut(
+                        animationSpec =  tween(durationMillis = animationDuration)
+                    )
                     else -> null
                 }
             }, enterTransition = {
@@ -125,7 +129,25 @@ fun RandleticsNavigation(
             }
         ) {
             val workoutId = UUID.fromString(it.arguments?.getString("workoutId"))
-            PreWorkoutScreen(workoutId = workoutId, navController = navController)
+            PreWorkoutScreen(
+                navController = navController)
+        }
+
+        composable(route = RandleticsScreens.WorkoutScreen.name + "/{workoutId}", arguments = listOf(
+            navArgument(name="workoutId"){
+                type = NavType.StringType
+            }),
+            enterTransition = {
+            when (initialState.destination.route){
+                "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideIntoContainer(
+                    animationSpec = tween(durationMillis = animationDuration),
+                    towards = AnimatedContentScope.SlideDirection.Up
+                )
+                else -> null
+            }
+        }) {
+            WorkoutScreen(
+                navController = navController)
         }
 
         composable(RandleticsScreens.ExercisesListScreen.name) {
