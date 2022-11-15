@@ -25,8 +25,8 @@ import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.utils.PopUp
 import com.kamilkulka.randletics.utils.RowWithIcon
-import java.util.*
 
 @Composable
 fun PreWorkoutScreen(
@@ -40,15 +40,31 @@ fun PreWorkoutScreen(
                 contentPadding = PaddingValues(12.dp),
                 backgroundColor = Color.Transparent
             ) {
-                Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        })
-                Spacer(modifier = Modifier.size(20.dp))
-                Text(text = "Main Screen")
+                Row(
+                    modifier= Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clickable {
+                                navController.popBackStack()
+                            })
+                    if (viewModel.isTrueWorkout.value){
+                        Icon(
+                            imageVector = Icons.Rounded.Delete,
+                            contentDescription = "Delete Workout",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable {
+                                    viewModel.setDeletePopUp(true)
+                                })
+                    }
+                }
             }
         }) { contentPadding ->
 
@@ -142,7 +158,10 @@ fun PreWorkoutScreen(
                     .height(76.dp)
                     .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
                     .clickable {
-                        navController.navigate(route = RandleticsScreens.WorkoutScreen.name + "/${viewModel.workout.value.workoutId}")
+                        navController.navigate(
+                            route = RandleticsScreens.WorkoutScreen.name +
+                                    "/${viewModel.workout.value.workoutId}"
+                        )
                     },
                 shape = CircleShape
             ) {
@@ -151,7 +170,23 @@ fun PreWorkoutScreen(
                 }
             }
         }
+        if (viewModel.deletePopUp.collectAsState().value){
+            PopUp(modifier= Modifier
+                .width(240.dp)
+                .height(140.dp),
+                description = "Are you sure, you want to delete " +
+                        "\"${viewModel.workout.collectAsState().value.title}\"?",
+                leftButtonText = "Accept",
+                rightButtonText = "Delcine",
+                color = DustyGreen.copy(alpha = 0.75f),
+                onLeftButtonClick = {
+
+                },
+                onRightButtonClick = {
+                    viewModel.setDeletePopUp(false)
+                })
+        }
     }
-
-
 }
+
+

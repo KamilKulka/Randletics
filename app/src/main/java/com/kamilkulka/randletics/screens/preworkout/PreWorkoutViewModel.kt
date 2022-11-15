@@ -1,9 +1,11 @@
 package com.kamilkulka.randletics.screens.preworkout
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.kamilkulka.randletics.models.entities.Equipment
 import com.kamilkulka.randletics.models.entities.Exercise
 import com.kamilkulka.randletics.models.entities.Workout
@@ -26,6 +28,8 @@ class PreWorkoutViewModel @Inject constructor(
     private val _workout = MutableStateFlow(Workout(title = "Empty Workout"))
     val workout = _workout.asStateFlow()
 
+    val isTrueWorkout= mutableStateOf(false)
+
     private val _exercises = MutableStateFlow<List<Exercise>>(
             emptyList()
     )
@@ -37,12 +41,16 @@ class PreWorkoutViewModel @Inject constructor(
     private val _exercisesDropdown = MutableStateFlow(false)
     val exercisesDropdown = _exercisesDropdown.asStateFlow()
 
+    private val _deletePopUp = MutableStateFlow(false)
+    val deletePopUp = _deletePopUp.asStateFlow()
+
     companion object {
+
         const val TAG = "PreWorkoutViewModel"
     }
 
     init {
-
+        Log.d(TAG, "is true: ${isTrueWorkout.value}")
         savedStateHandle.get<String>("workoutId").let { workoutId ->
             if (workoutId.isNullOrEmpty()) {
                 Log.d(TAG, "Err: No workoutId")
@@ -66,8 +74,14 @@ class PreWorkoutViewModel @Inject constructor(
                             _equipments.value = workoutWithEquipments.equipments
                         }
                 }
+                isTrueWorkout.value = true
             }
         }
+        Log.d(TAG, "is true: ${isTrueWorkout.value}")
+    }
+
+    fun setDeletePopUp(isVisible: Boolean) {
+        _deletePopUp.value = isVisible
     }
 
     fun setExercisesDropdown() {
