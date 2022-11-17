@@ -54,7 +54,7 @@ fun PreWorkoutScreen(
                             .clickable {
                                 navController.popBackStack()
                             })
-                    if (viewModel.isTrueWorkout.value){
+                    if (viewModel.workout.collectAsState().value!=null){
                         Icon(
                             imageVector = Icons.Rounded.Delete,
                             contentDescription = "Delete Workout",
@@ -67,6 +67,7 @@ fun PreWorkoutScreen(
                 }
             }
         }) { contentPadding ->
+//        Text(text = "text", modifier = Modifier.padding(contentPadding))
 
         Column(
             modifier = Modifier
@@ -87,7 +88,7 @@ fun PreWorkoutScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.workout.collectAsState().value.title,
+                    text = viewModel.workout.collectAsState().value?.title ?: "" ,
                     fontSize = 34.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -151,36 +152,44 @@ fun PreWorkoutScreen(
                 }
             }
         }
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(76.dp)
-                    .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
-                    .clickable {
-                        navController.navigate(
-                            route = RandleticsScreens.WorkoutScreen.name +
-                                    "/${viewModel.workout.value.workoutId}"
-                        )
-                    },
-                shape = CircleShape
-            ) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Start Workout", fontSize = 24.sp)
+        if(viewModel.workout.collectAsState().value != null){
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(76.dp)
+                        .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
+                        .clickable {
+                            navController.navigate(
+                                route = RandleticsScreens.WorkoutScreen.name +
+                                        "/${viewModel.workout.value?.workoutId ?: "Err!!"}"
+                            )
+                        },
+                    shape = CircleShape
+                ) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text(text = "Start Workout", fontSize = 24.sp)
+                    }
                 }
             }
         }
+
         if (viewModel.deletePopUp.collectAsState().value){
             PopUp(modifier= Modifier
                 .width(240.dp)
                 .height(140.dp),
-                description = "Are you sure, you want to delete " +
-                        "\"${viewModel.workout.collectAsState().value.title}\"?",
+                description = "Are you sure, you want to delete "
+                        +
+                        "\"${viewModel.workout.collectAsState().value?.title ?: "Err!"}\"?"
+                ,
                 leftButtonText = "Accept",
                 rightButtonText = "Delcine",
                 color = DustyGreen.copy(alpha = 0.75f),
                 onLeftButtonClick = {
-
+                    viewModel.deleteWorkout()
+                    navController.navigate(route = RandleticsScreens.MainScreen.name){
+                        popUpTo(RandleticsScreens.PreWorkoutScreen.name){inclusive=true}
+                    }
                 },
                 onRightButtonClick = {
                     viewModel.setDeletePopUp(false)

@@ -28,4 +28,7 @@ class WorkoutsRepository @Inject constructor(private val workoutDatabaseDao: Wor
     suspend fun deleteWorkout(workout: Workout) = workoutDatabaseDao.deleteWorkout(workout)
     suspend fun insertWorkoutExercise(crossRef: WorkoutExerciseCrossRef) = workoutDatabaseDao.insertWorkoutExerciseCrossRef(crossRef)
     suspend fun insertWorkoutEquipment(crossRef: WorkoutEquipmentCrossRef)= workoutDatabaseDao.insertWorkoutEquipmentCrossRef(crossRef)
+    suspend fun deleteWorkoutById(id:String) = workoutDatabaseDao.deleteWorkoutById(id)
+    suspend fun deleteWorkoutExerciseById(id:String) = workoutDatabaseDao.deleteWorkoutExerciseById(id)
+    suspend fun deleteWorkoutEquipmentById(id:String) = workoutDatabaseDao.deleteWorkoutEquipmentById(id)
 }

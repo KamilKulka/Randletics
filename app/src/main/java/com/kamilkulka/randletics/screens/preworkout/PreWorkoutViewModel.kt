@@ -1,17 +1,16 @@
 package com.kamilkulka.randletics.screens.preworkout
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.kamilkulka.randletics.models.entities.Equipment
 import com.kamilkulka.randletics.models.entities.Exercise
 import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,10 +24,8 @@ class PreWorkoutViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _workout = MutableStateFlow(Workout(title = "Empty Workout"))
+    private val _workout = MutableStateFlow<Workout?>(null)
     val workout = _workout.asStateFlow()
-
-    val isTrueWorkout= mutableStateOf(false)
 
     private val _exercises = MutableStateFlow<List<Exercise>>(
             emptyList()
@@ -44,40 +41,44 @@ class PreWorkoutViewModel @Inject constructor(
     private val _deletePopUp = MutableStateFlow(false)
     val deletePopUp = _deletePopUp.asStateFlow()
 
+    private var job1: Job? = null
+    private var job2: Job? = null
+    private var job3: Job? = null
+
+
+
     companion object {
 
         const val TAG = "PreWorkoutViewModel"
     }
 
     init {
-        Log.d(TAG, "is true: ${isTrueWorkout.value}")
+
         savedStateHandle.get<String>("workoutId").let { workoutId ->
-            if (workoutId.isNullOrEmpty()) {
-                Log.d(TAG, "Err: No workoutId")
-            } else {
-                viewModelScope.launch(Dispatchers.IO) {
+            if (!workoutId.isNullOrEmpty()) {
+                job1 = viewModelScope.launch(Dispatchers.IO) {
                     workoutsRepository.getWorkoutById(workoutId).distinctUntilChanged()
                         .collect { workout ->
                             _workout.value = workout
-                            Log.d(TAG, "Workout name: ${_workout.value.title}")
                         }
+                    job1 = null
                 }
-                viewModelScope.launch(Dispatchers.IO) {
+                job2 = viewModelScope.launch(Dispatchers.IO) {
                     workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId).distinctUntilChanged()
                         .collect { workoutWithExercise ->
                             _exercises.value = workoutWithExercise.exercises
                         }
+                    job2 = null
                 }
-                viewModelScope.launch(Dispatchers.IO) {
+                job3 = viewModelScope.launch(Dispatchers.IO) {
                     workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId).distinctUntilChanged()
                         .collect { workoutWithEquipments ->
                             _equipments.value = workoutWithEquipments.equipments
                         }
+                    job3 = null
                 }
-                isTrueWorkout.value = true
             }
         }
-        Log.d(TAG, "is true: ${isTrueWorkout.value}")
     }
 
     fun setDeletePopUp(isVisible: Boolean) {
@@ -89,14 +90,19 @@ class PreWorkoutViewModel @Inject constructor(
     }
 
     fun countExercisesOf(): Int {
-        return exercises.value.size
+        if (_exercises.value.isEmpty()) return 0
+
+        return _exercises.value.size
     }
 
     fun getFormattedDifficulty(): String {
-        val difficulty =
-            _workout.value.difficulty
-        return difficulty.toString().substring(0, 1) + difficulty.toString().substring(1)
-            .lowercase()
+        if (_workout.value!=null){
+            val difficulty =
+                _workout.value!!.difficulty
+            return difficulty.toString().substring(0, 1) + difficulty.toString().substring(1)
+                .lowercase()
+        }
+        return "-"
     }
 
     fun getAllEquipmentsString(): String {
@@ -117,5 +123,33 @@ class PreWorkoutViewModel @Inject constructor(
             }
         }
         return string
+    }
+
+    fun deleteWorkout(){
+        if (_workout.value!=null){
+            val idToDelete = _workout.value!!.workoutId.toString()
+            job1?.cancel()
+            job2?.cancel()
+            job3?.cancel()
+
+        Log.d(TAG,"ViewModelScope Cancelled")
+
+            _workout.value=null
+            _exercises.value= emptyList()
+            _equipments.value= emptyList()
+
+            viewModelScope.launch(Dispatchers.Main) {
+                workoutsRepository.deleteWorkoutEquipmentById(idToDelete)
+                Log.d(TAG,"Workout Equipment deleted!")
+            }
+            viewModelScope.launch(Dispatchers.Main) {
+                workoutsRepository.deleteWorkoutExerciseById(idToDelete)
+                Log.d(TAG,"Workout Exercises deleted!")
+            }
+            viewModelScope.launch(Dispatchers.Main) {
+                workoutsRepository.deleteWorkoutById(idToDelete)
+                Log.d(TAG,"Workout deleted!")
+            }
+        }
     }
 }

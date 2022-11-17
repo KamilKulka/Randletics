@@ -85,6 +85,15 @@ interface WorkoutDatabaseDao {
     @Query("DELETE from workouts_table")
     suspend fun deleteAllWorkouts()
 
+    @Query("DELETE FROM workouts_table WHERE workoutId = :id")
+    suspend fun deleteWorkoutById(id: String)
+
+    @Query("DELETE FROM WorkoutEquipmentCrossRef WHERE workoutId = :id")
+    suspend fun deleteWorkoutEquipmentById(id: String)
+
+    @Query("DELETE FROM WorkoutExerciseCrossRef WHERE workoutId = :id")
+    suspend fun deleteWorkoutExerciseById(id: String)
+
     @Delete
     suspend fun deleteWorkout(workout: Workout)
 
