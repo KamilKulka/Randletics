@@ -105,8 +105,9 @@ fun RandleticsNavigation(
                         animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.End
                     )
-                    "${ RandleticsScreens.WorkoutScreen.name }/{workoutId}" -> fadeOut(
-                        animationSpec =  tween(durationMillis = animationDuration)
+                    "${ RandleticsScreens.WorkoutScreen.name }/{workoutId}" -> slideOutOfContainer(
+                        animationSpec =  tween(durationMillis = animationDuration),
+                        towards = AnimatedContentScope.SlideDirection.Up
                     )
                     else -> null
                 }
@@ -128,7 +129,6 @@ fun RandleticsNavigation(
                 }
             }
         ) {
-            val workoutId = UUID.fromString(it.arguments?.getString("workoutId"))
             PreWorkoutScreen(
                 navController = navController)
         }
