@@ -152,22 +152,21 @@ fun PreWorkoutScreen(
         }
         if(viewModel.workout.collectAsState().value != null){
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-                Surface(
+                Button(
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(backgroundColor = DustyGreen),
+                    contentPadding= PaddingValues(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(76.dp)
-                        .padding(start = 48.dp, end = 48.dp, top = 12.dp, bottom = 12.dp)
-                        .clickable {
-                            navController.navigate(
+                        .wrapContentHeight()
+                        .padding(start = 48.dp, end = 48.dp, top = 32.dp, bottom = 32.dp),
+                    onClick = {
+                        navController.navigate(
                                 route = RandleticsScreens.WorkoutScreen.name +
                                         "/${viewModel.workout.value?.workoutId ?: "Err!!"}"
                             )
-                        },
-                    shape = CircleShape
-                ) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(text = "Start Workout", fontSize = 24.sp)
-                    }
+                    }) {
+                    Text(text = "Start Workout", fontSize = 24.sp)
                 }
             }
         }
