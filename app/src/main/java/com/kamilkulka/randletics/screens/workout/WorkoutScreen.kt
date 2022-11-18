@@ -3,16 +3,19 @@ package com.kamilkulka.randletics.screens.workout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Cancel
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Flag
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +35,7 @@ fun WorkoutScreen(
             .fillMaxSize(),
         color = SageGreen
     ) {
-        Column() {
+        Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -41,7 +44,9 @@ fun WorkoutScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(
-                    modifier = Modifier.wrapContentSize(),
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(start = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -60,47 +65,123 @@ fun WorkoutScreen(
                     )
                 }
                 Button(
+                    shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                    backgroundColor = DimmedSageGreen,
-                    contentColor = DustyGreen),
-                    contentPadding = PaddingValues(10.dp),
+                        backgroundColor = DimmedSageGreen,
+                        contentColor = DustyGreen
+                    ),
+                    contentPadding = PaddingValues(
+                        top = 10.dp,
+                        bottom = 10.dp,
+                        start = 14.dp,
+                        end = 14.dp
+                    ),
                     onClick = { /*TODO Finish Workout*/ }) {
                     Icon(imageVector = Icons.Rounded.Flag, contentDescription = "End")
                     Text(text = "Finish Workout", fontSize = 16.sp)
                 }
             }
-            Column(modifier = Modifier
-                .background(DustyGreen)
-                .fillMaxHeight()) {
-                Box(
+
+            if (viewModel.restScreen.collectAsState().value) {
+                Divider(
+                    modifier = Modifier.padding(24.dp),
+                    color = DimmedSageGreen)
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp)
-                        .aspectRatio(ratio = 1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (viewModel.isVisibleProgressBar.collectAsState().value) {
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceAround,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(modifier = Modifier.wrapContentHeight()) {
+                        Text(
+                            buildAnnotatedString{
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontSize = 42.sp,
+                                        fontWeight = FontWeight.SemiBold)){
+                                    append("Relax,\n")
+                                }
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontSize = 42.sp,
+                                        color = Celadon,
+                                        fontWeight = FontWeight.Light)){
+                                    append("breathe out")
+                                }
+                        })
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(280.dp)
+                            .aspectRatio(ratio = 1f),
+                        contentAlignment = Alignment.Center
+                    ) {
                         CircularProgressIndicator(
                             modifier = Modifier.fillMaxSize(),
                             progress = viewModel.progressBar.collectAsState().value,
                             color = DustyGreen,
                             strokeWidth = 12.dp
                         )
-                        Text(
-                            text = viewModel.timeLeft.collectAsState().value.toString(),
-                            fontSize = 48.sp
-                        )
-
-                    } else {
-                        OutlinedButton(onClick = {
-                            viewModel.changeProgressBarVisibility()
-                            viewModel.startCounter()
-                        }) {
-
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = viewModel.timeLeft.collectAsState().value.toString(),
+                            fontSize = 42.sp)
+                            Spacer(modifier = Modifier.size(16.dp))
+                            Text(text = "Seconds Left",
+                                fontSize = 16.sp,
+                                color = Celadon,
+                                textAlign = TextAlign.Center)
+                        }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        Button(
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = DimmedSageGreen,
+                                contentColor = DustyGreen
+                            ),
+                            contentPadding = PaddingValues(
+                                top = 10.dp,
+                                bottom = 10.dp,
+                                start = 14.dp,
+                                end = 14.dp
+                            ),
+                            onClick = { /*TODO Pause rest*/ }) {
+                            Icon(imageVector = Icons.Rounded.Pause, contentDescription = "Pause")
+                            Text(text = "Pause", fontSize = 16.sp)
+                        }
+                        Button(
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = DimmedSageGreen,
+                                contentColor = DustyGreen
+                            ),
+                            contentPadding = PaddingValues(
+                                top = 10.dp,
+                                bottom = 10.dp,
+                                start = 14.dp,
+                                end = 14.dp
+                            ),
+                            onClick = { /*TODO Skip rest*/ }) {
+                            Text(text = "Skip", fontSize = 16.sp)
+                            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Skip")
                         }
                     }
                 }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .background(DustyGreen)
+                        .fillMaxHeight()
+                ) {
 
+                }
             }
         }
     }
