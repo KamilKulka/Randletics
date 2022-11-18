@@ -38,6 +38,9 @@ class WorkoutViewModel @Inject constructor(
     private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
     val exercises = _exercises.asStateFlow()
 
+    private val _isVisibleProgressBar = MutableStateFlow(false)
+    val isVisibleProgressBar = _isVisibleProgressBar.asStateFlow()
+
     private val _timeLeft = MutableStateFlow(0L)
     val timeLeft = _timeLeft.asStateFlow()
 
@@ -51,7 +54,7 @@ class WorkoutViewModel @Inject constructor(
         }
 
         override fun onFinish() {
-
+            changeProgressBarVisibility()
         }
     }
 
@@ -85,6 +88,9 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
+    fun changeProgressBarVisibility(){
+        _isVisibleProgressBar.value = !_isVisibleProgressBar.value
+    }
 
     fun startCounter() {
         counter.start()
