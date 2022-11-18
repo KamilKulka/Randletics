@@ -105,8 +105,8 @@ fun RandleticsNavigation(
                         animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.End
                     )
-                    "${ RandleticsScreens.WorkoutScreen.name }/{workoutId}" -> slideOutOfContainer(
-                        animationSpec =  tween(durationMillis = animationDuration),
+                    "${RandleticsScreens.WorkoutScreen.name}/{workoutId}" -> slideOutOfContainer(
+                        animationSpec = tween(durationMillis = animationDuration),
                         towards = AnimatedContentScope.SlideDirection.Up
                     )
                     else -> null
@@ -130,24 +130,28 @@ fun RandleticsNavigation(
             }
         ) {
             PreWorkoutScreen(
-                navController = navController)
+                navController = navController
+            )
         }
 
-        composable(route = RandleticsScreens.WorkoutScreen.name + "/{workoutId}", arguments = listOf(
-            navArgument(name="workoutId"){
-                type = NavType.StringType
-            }),
+        composable(
+            route = RandleticsScreens.WorkoutScreen.name + "/{workoutId}",
+            arguments = listOf(
+                navArgument(name = "workoutId") {
+                    type = NavType.StringType
+                }),
             enterTransition = {
-            when (initialState.destination.route){
-                "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideIntoContainer(
-                    animationSpec = tween(durationMillis = animationDuration),
-                    towards = AnimatedContentScope.SlideDirection.Up
-                )
-                else -> null
-            }
-        }) {
+                when (initialState.destination.route) {
+                    "${RandleticsScreens.PreWorkoutScreen.name}/{workoutId}" -> slideIntoContainer(
+                        animationSpec = tween(durationMillis = animationDuration),
+                        towards = AnimatedContentScope.SlideDirection.Up
+                    )
+                    else -> null
+                }
+            }) {
             WorkoutScreen(
-                navController = navController)
+                navController = navController
+            )
         }
 
         composable(RandleticsScreens.ExercisesListScreen.name) {

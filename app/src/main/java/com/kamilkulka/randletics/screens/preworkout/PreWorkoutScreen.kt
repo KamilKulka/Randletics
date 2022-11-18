@@ -67,8 +67,6 @@ fun PreWorkoutScreen(
                 }
             }
         }) { contentPadding ->
-//        Text(text = "text", modifier = Modifier.padding(contentPadding))
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -180,7 +178,7 @@ fun PreWorkoutScreen(
                 .height(140.dp),
                 description = "Are you sure, you want to delete "
                         +
-                        "\"${viewModel.workout.collectAsState().value?.title ?: "Err!"}\"?"
+                        "\"${viewModel.workout.collectAsState().value?.title}\"?"
                 ,
                 leftButtonText = "Accept",
                 rightButtonText = "Delcine",
