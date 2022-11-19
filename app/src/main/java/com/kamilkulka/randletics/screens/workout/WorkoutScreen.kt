@@ -137,10 +137,12 @@ fun WorkoutScreen(
                     Row(
                         modifier = Modifier
                             .wrapContentHeight()
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
+                            .fillMaxWidth()
+                            .padding(end=50.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
                         Button(
+                            modifier = Modifier.width(100.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = DimmedSageGreen,
@@ -152,23 +154,9 @@ fun WorkoutScreen(
                                 start = 14.dp,
                                 end = 14.dp
                             ),
-                            onClick = { /*TODO Pause rest*/ }) {
-                            Icon(imageVector = Icons.Rounded.Pause, contentDescription = "Pause")
-                            Text(text = "Pause", fontSize = 16.sp)
-                        }
-                        Button(
-                            shape = CircleShape,
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = DimmedSageGreen,
-                                contentColor = DustyGreen
-                            ),
-                            contentPadding = PaddingValues(
-                                top = 10.dp,
-                                bottom = 10.dp,
-                                start = 14.dp,
-                                end = 14.dp
-                            ),
-                            onClick = { /*TODO Skip rest*/ }) {
+                            onClick = {
+                                viewModel.skipCounter()
+                            }) {
                             Text(text = "Skip", fontSize = 16.sp)
                             Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Skip")
                         }
@@ -178,9 +166,28 @@ fun WorkoutScreen(
                 Column(
                     modifier = Modifier
                         .background(DustyGreen)
-                        .fillMaxHeight()
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
+                    Button(
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = DimmedSageGreen,
+                            contentColor = DustyGreen
+                        ),
+                        contentPadding = PaddingValues(
+                            top = 10.dp,
+                            bottom = 10.dp,
+                            start = 14.dp,
+                            end = 14.dp
+                        ),
+                        onClick = {
+                            viewModel.changeRestScreen()
+                            viewModel.startCounter()
+                        }) {
+                        Text(text = "Complete", fontSize = 24.sp)
+                        Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Complete")
+                    }
                 }
             }
         }

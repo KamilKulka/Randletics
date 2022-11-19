@@ -1,5 +1,6 @@
 package com.kamilkulka.randletics
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.runtime.Composable
@@ -149,6 +150,7 @@ fun RandleticsNavigation(
                     else -> null
                 }
             }) {
+            BackHandler(true) {}
             WorkoutScreen(
                 navController = navController
             )

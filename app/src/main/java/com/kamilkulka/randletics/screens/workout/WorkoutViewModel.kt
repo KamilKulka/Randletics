@@ -38,6 +38,9 @@ class WorkoutViewModel @Inject constructor(
     private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
     val exercises = _exercises.asStateFlow()
 
+    private val _restScreen = MutableStateFlow(false)
+    val restScreen = _restScreen.asStateFlow()
+
     private val _isVisibleProgressBar = MutableStateFlow(false)
     val isVisibleProgressBar = _isVisibleProgressBar.asStateFlow()
 
@@ -48,14 +51,16 @@ class WorkoutViewModel @Inject constructor(
     val progressBar = _progressBar.asStateFlow()
 
     private val counter = object : CountDownTimer(SEC_SPAN * 1000L, 1) {
+
         override fun onTick(millisUntilFinished: Long) {
             _timeLeft.value = millisUntilFinished / 1000
             _progressBar.value = millisUntilFinished.toFloat() / (SEC_SPAN * 1000).toFloat()
         }
 
         override fun onFinish() {
-            changeProgressBarVisibility()
+            changeRestScreen()
         }
+
     }
 
     init {
@@ -71,14 +76,16 @@ class WorkoutViewModel @Inject constructor(
                         }
                 }
                 viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId).distinctUntilChanged()
+                    workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId)
+                        .distinctUntilChanged()
                         .collect { workoutWithExercises ->
                             _exercises.value = workoutWithExercises.exercises
                             Log.d(TAG, "Exercises init")
                         }
                 }
                 viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId).distinctUntilChanged()
+                    workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId)
+                        .distinctUntilChanged()
                         .collect { workoutWithEquipments ->
                             _equipments.value = workoutWithEquipments.equipments
                             Log.d(TAG, "Equipments init")
@@ -88,8 +95,17 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
-    fun changeProgressBarVisibility(){
+    fun changeRestScreen() {
+        _restScreen.value = !_restScreen.value
+    }
+
+    fun changeProgressBarVisibility() {
         _isVisibleProgressBar.value = !_isVisibleProgressBar.value
+    }
+
+    fun skipCounter() {
+        _restScreen.value = false
+        counter.cancel()
     }
 
     fun startCounter() {
