@@ -59,7 +59,11 @@ interface WorkoutDatabaseDao {
 
     @Transaction
     @Query("SELECT * FROM exercise_table")
-    fun getExerciseWithEquipments(): Flow<List<ExerciseWithEquipment>>
+    fun getAllExerciseWithEquipments(): Flow<List<ExerciseWithEquipment>>
+
+    @Transaction
+    @Query("SELECT * FROM exercise_table WHERE exerciseId = :id")
+    fun getExerciseWithEquipmentsByExerciseId(id: String): Flow<ExerciseWithEquipment>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseEquipmentCrossRef(crossRef: ExerciseEquipmentCrossRef)
