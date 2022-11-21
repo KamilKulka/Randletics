@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.TestModifierUpdaterLayout
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
@@ -85,29 +86,35 @@ fun WorkoutScreen(
             if (viewModel.restScreen.collectAsState().value) {
                 Divider(
                     modifier = Modifier.padding(24.dp),
-                    color = DimmedSageGreen)
+                    color = DimmedSageGreen
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Column(modifier = Modifier.wrapContentHeight()) {
                         Text(
-                            buildAnnotatedString{
+                            buildAnnotatedString {
                                 withStyle(
                                     style = SpanStyle(
                                         fontSize = 42.sp,
-                                        fontWeight = FontWeight.SemiBold)){
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                ) {
                                     append("Relax,\n")
                                 }
                                 withStyle(
                                     style = SpanStyle(
                                         fontSize = 42.sp,
                                         color = Celadon,
-                                        fontWeight = FontWeight.Light)){
+                                        fontWeight = FontWeight.Light
+                                    )
+                                ) {
                                     append("breathe out")
                                 }
-                        })
+                            })
                     }
                     Box(
                         modifier = Modifier
@@ -125,20 +132,24 @@ fun WorkoutScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(text = viewModel.timeLeft.collectAsState().value.toString(),
-                            fontSize = 42.sp)
+                            Text(
+                                text = viewModel.timeLeft.collectAsState().value.toString(),
+                                fontSize = 42.sp
+                            )
                             Spacer(modifier = Modifier.size(16.dp))
-                            Text(text = "Seconds Left",
+                            Text(
+                                text = "Seconds Left",
                                 fontSize = 16.sp,
                                 color = Celadon,
-                                textAlign = TextAlign.Center)
+                                textAlign = TextAlign.Center
+                            )
                         }
                     }
                     Row(
                         modifier = Modifier
                             .wrapContentHeight()
                             .fillMaxWidth()
-                            .padding(end=50.dp),
+                            .padding(end = 50.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(
@@ -158,7 +169,10 @@ fun WorkoutScreen(
                                 viewModel.skipCounter()
                             }) {
                             Text(text = "Skip", fontSize = 16.sp)
-                            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Skip")
+                            Icon(
+                                imageVector = Icons.Rounded.KeyboardArrowRight,
+                                contentDescription = "Skip"
+                            )
                         }
                     }
                 }
@@ -166,9 +180,130 @@ fun WorkoutScreen(
                 Column(
                     modifier = Modifier
                         .background(DustyGreen)
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.85f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
                 ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(0.75f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Exercise Title",
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            fontSize = 42.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = DimmedSageGreen
+                        )
+                        Spacer(modifier = Modifier.size(12.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(0.5f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(8.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "12",
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Text(
+                                    text = "Reps",
+                                    fontSize = 16.sp,
+                                    color = Celadon,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            Divider(
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(60.dp)
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .wrapContentSize()
+                                    .padding(8.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = DimmedSageGreen,
+                                            fontSize = 32.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    ) {
+                                        append("1")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = Celadon,
+                                            fontSize = 18.sp
+                                        )
+                                    ) {
+                                        append("/3")
+                                    }
+                                })
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Text(
+                                    text = "Series",
+                                    fontSize = 16.sp,
+                                    color = Celadon,
+                                    textAlign = TextAlign.Center
+                                )
+
+                            }
+
+                        }
+                        Spacer(modifier = Modifier.size(24.dp))
+                        Text(text = buildAnnotatedString {
+                            withStyle(
+                                style = SpanStyle(
+                                    color = DimmedSageGreen,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            ) {
+                                append("Equipment:\n")
+                            }
+                            withStyle(
+                                style = SpanStyle(color = Celadon, fontSize = 16.sp)
+                            ) {
+                                append("Equipment needed, Bench, Bell, Bar, Resistance Bands...")
+                            }
+
+                        }, modifier = Modifier.fillMaxWidth())
+                    }
+                    Text(text = buildAnnotatedString {
+                        withStyle(style = ParagraphStyle(lineHeight = 32.sp)) {
+                            withStyle(
+                                style = SpanStyle(color = Celadon, fontSize = 16.sp)
+                            ) {
+                                append("Next\n")
+                            }
+                            withStyle(
+                                style = SpanStyle(
+                                    color = DimmedSageGreen,
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            ) {
+                                append("Title of next exercise")
+                            }
+                        }
+                    }, modifier = Modifier.fillMaxWidth(0.75f))
+                }
+                Box(modifier = Modifier.fillMaxSize().background(DustyGreen), contentAlignment = Alignment.Center) {
                     Button(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
@@ -186,7 +321,10 @@ fun WorkoutScreen(
                             viewModel.startCounter()
                         }) {
                         Text(text = "Complete", fontSize = 24.sp)
-                        Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "Complete")
+                        Icon(
+                            imageVector = Icons.Rounded.KeyboardArrowRight,
+                            contentDescription = "Complete"
+                        )
                     }
                 }
             }
