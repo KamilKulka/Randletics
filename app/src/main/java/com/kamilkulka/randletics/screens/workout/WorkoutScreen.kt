@@ -51,7 +51,7 @@ fun WorkoutScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "5",
+                        text = viewModel.getExercisesLeft().toString(),
                         color = DustyGreen,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 42.sp,
@@ -190,7 +190,7 @@ fun WorkoutScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Exercise Title",
+                            text = viewModel.getExerciseTitle(),
                             modifier = Modifier
                                 .fillMaxWidth(),
                             fontSize = 42.sp,
@@ -211,7 +211,7 @@ fun WorkoutScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "12",
+                                    text = viewModel.getReps().toString(),
                                     fontSize = 32.sp,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -243,7 +243,7 @@ fun WorkoutScreen(
                                             fontWeight = FontWeight.Medium
                                         )
                                     ) {
-                                        append("1")
+                                        append(viewModel.getSeries().toString())
                                     }
                                     withStyle(
                                         style = SpanStyle(
@@ -279,7 +279,7 @@ fun WorkoutScreen(
                             withStyle(
                                 style = SpanStyle(color = Celadon, fontSize = 16.sp)
                             ) {
-                                append("Equipment needed, Bench, Bell, Bar, Resistance Bands...")
+                                append(viewModel.getEquipmentForExercise())
                             }
 
                         }, modifier = Modifier.fillMaxWidth())
@@ -298,7 +298,7 @@ fun WorkoutScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                             ) {
-                                append("Title of next exercise")
+                                append(viewModel.getNextExerciseTitle())
                             }
                         }
                     }, modifier = Modifier.fillMaxWidth(0.75f))

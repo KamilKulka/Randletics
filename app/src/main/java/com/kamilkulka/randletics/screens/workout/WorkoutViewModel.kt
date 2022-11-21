@@ -35,14 +35,13 @@ class WorkoutViewModel @Inject constructor(
     private val _equipments = MutableStateFlow<List<Equipment>>(emptyList())
     val equipments = _equipments.asStateFlow()
 
+    private val _currentExerciseEquipments = MutableStateFlow<List<Equipment>>(emptyList())
+
     private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
     val exercises = _exercises.asStateFlow()
 
     private val _restScreen = MutableStateFlow(false)
     val restScreen = _restScreen.asStateFlow()
-
-    private val _isVisibleProgressBar = MutableStateFlow(false)
-    val isVisibleProgressBar = _isVisibleProgressBar.asStateFlow()
 
     private val _timeLeft = MutableStateFlow(0L)
     val timeLeft = _timeLeft.asStateFlow()
@@ -62,6 +61,8 @@ class WorkoutViewModel @Inject constructor(
         }
 
     }
+    private var currentExercise = 1
+    private var currentSeries = 1
 
     init {
         savedStateHandle.get<String>("workoutId").let { workoutId ->
@@ -95,12 +96,63 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
-    fun changeRestScreen() {
-        _restScreen.value = !_restScreen.value
+    fun getExercisesLeft(): Int{
+        return _exercises.value.size-currentExercise
     }
 
-    fun changeProgressBarVisibility() {
-        _isVisibleProgressBar.value = !_isVisibleProgressBar.value
+    fun getExerciseTitle(): String{
+        if (_exercises.value.isNotEmpty()){
+            return _exercises.value[currentExercise-1].name
+        }
+        return ""
+    }
+    fun getReps():Int{
+        if (_exercises.value.isNotEmpty()){
+            return when(currentSeries){
+                2 -> (_exercises.value[currentExercise-1].defaultRepeats*5)/6
+                3 -> (_exercises.value[currentExercise-1].defaultRepeats*3)/4
+                else -> _exercises.value[currentExercise-1].defaultRepeats
+            }
+        }
+        return 0
+    }
+
+    fun getSeries():Int{
+        return currentSeries
+    }
+
+    fun getEquipmentForExercise():String{
+        if (_exercises.value.isNotEmpty() && currentExercise>0){
+            viewModelScope.launch(Dispatchers.IO) {
+                workoutsRepository.getExerciseWithEquipmentsByExerciseId(_exercises.value[currentExercise - 1].exerciseId.toString())
+                    .distinctUntilChanged().collect() { exerciseWithEquipment ->
+                        _currentExerciseEquipments.value = exerciseWithEquipment.equipments
+                }
+            }
+            if (_currentExerciseEquipments.value.isNotEmpty()){
+                var index = 0
+                var exercisesString = ""
+                while (index < _currentExerciseEquipments.value.size) {
+                    if (index == _currentExerciseEquipments.value.size - 1) {
+                        exercisesString += _currentExerciseEquipments.value[index].equipmentName
+                    } else {
+                        exercisesString = exercisesString + _currentExerciseEquipments.value[index].equipmentName + ", "
+                    }
+                    index++
+                }
+                return exercisesString
+            }
+        }
+        return "No equipment"
+    }
+
+    fun getNextExerciseTitle():String{
+        if (_exercises.value.size>currentExercise) return _exercises.value[currentExercise].name
+        return "End of workout"
+    }
+
+    fun changeRestScreen() {
+        _restScreen.value = !_restScreen.value
     }
 
     fun skipCounter() {
