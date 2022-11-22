@@ -317,8 +317,11 @@ fun WorkoutScreen(
                             end = 14.dp
                         ),
                         onClick = {
-                            viewModel.changeRestScreen()
-                            viewModel.startCounter()
+                            if(viewModel.getExercisesLeft()==0 && viewModel.getSeries()==3){
+                                //TODO nav to end screen
+                            }else{
+                                viewModel.complete()
+                            }
                         }) {
                         Text(text = "Complete", fontSize = 24.sp)
                         Icon(

@@ -61,8 +61,8 @@ class WorkoutViewModel @Inject constructor(
         }
 
     }
-    private var currentExercise = 1
-    private var currentSeries = 1
+    private var _currentExercise = MutableStateFlow(1)
+    private var _currentSeries = MutableStateFlow(1)
 
     init {
         savedStateHandle.get<String>("workoutId").let { workoutId ->
@@ -96,47 +96,50 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
-    fun getExercisesLeft(): Int{
-        return _exercises.value.size-currentExercise
+    fun getExercisesLeft(): Int {
+        return _exercises.value.size - _currentExercise.value
     }
 
-    fun getExerciseTitle(): String{
-        if (_exercises.value.isNotEmpty()){
-            return _exercises.value[currentExercise-1].name
+    fun getExerciseTitle(): String {
+        if (_exercises.value.isNotEmpty()) {
+            return _exercises.value[_currentExercise.value - 1].name
         }
         return ""
     }
-    fun getReps():Int{
-        if (_exercises.value.isNotEmpty()){
-            return when(currentSeries){
-                2 -> (_exercises.value[currentExercise-1].defaultRepeats*5)/6
-                3 -> (_exercises.value[currentExercise-1].defaultRepeats*3)/4
-                else -> _exercises.value[currentExercise-1].defaultRepeats
+
+    fun getReps(): Int {
+        if (_exercises.value.isNotEmpty()) {
+            return when (_currentSeries.value) {
+                2 -> (_exercises.value[_currentExercise.value - 1].defaultRepeats * 5) / 6
+                3 -> (_exercises.value[_currentExercise.value - 1].defaultRepeats * 3) / 4
+                else -> _exercises.value[_currentExercise.value - 1].defaultRepeats
             }
         }
         return 0
     }
 
-    fun getSeries():Int{
-        return currentSeries
+    fun getSeries(): Int {
+        return _currentSeries.value
     }
 
-    fun getEquipmentForExercise():String{
-        if (_exercises.value.isNotEmpty() && currentExercise>0){
-            viewModelScope.launch(Dispatchers.IO) {
-                workoutsRepository.getExerciseWithEquipmentsByExerciseId(_exercises.value[currentExercise - 1].exerciseId.toString())
+    fun getEquipmentForExercise(): String {
+        if (_exercises.value.isNotEmpty() && _currentExercise.value > 0) {
+            viewModelScope.launch(Dispatchers.Main) {
+                workoutsRepository.getExerciseWithEquipmentsByExerciseId(
+                    _exercises.value[_currentExercise.value - 1].exerciseId.toString())
                     .distinctUntilChanged().collect() { exerciseWithEquipment ->
                         _currentExerciseEquipments.value = exerciseWithEquipment.equipments
-                }
+                    }
             }
-            if (_currentExerciseEquipments.value.isNotEmpty()){
+            if (_currentExerciseEquipments.value.isNotEmpty()) {
                 var index = 0
                 var exercisesString = ""
                 while (index < _currentExerciseEquipments.value.size) {
                     if (index == _currentExerciseEquipments.value.size - 1) {
                         exercisesString += _currentExerciseEquipments.value[index].equipmentName
                     } else {
-                        exercisesString = exercisesString + _currentExerciseEquipments.value[index].equipmentName + ", "
+                        exercisesString =
+                            exercisesString + _currentExerciseEquipments.value[index].equipmentName + ", "
                     }
                     index++
                 }
@@ -146,12 +149,12 @@ class WorkoutViewModel @Inject constructor(
         return "No equipment"
     }
 
-    fun getNextExerciseTitle():String{
-        if (_exercises.value.size>currentExercise) return _exercises.value[currentExercise].name
+    fun getNextExerciseTitle(): String {
+        if (_exercises.value.size > _currentExercise.value) return _exercises.value[_currentExercise.value].name
         return "End of workout"
     }
 
-    fun changeRestScreen() {
+    private fun changeRestScreen() {
         _restScreen.value = !_restScreen.value
     }
 
@@ -160,7 +163,25 @@ class WorkoutViewModel @Inject constructor(
         counter.cancel()
     }
 
-    fun startCounter() {
+    private fun startCounter() {
         counter.start()
+    }
+
+    fun complete(){
+        if (_currentSeries.value==3){
+            _currentSeries.value=1
+            Log.d(TAG,"Set series val to 1")
+        } else{
+            _currentSeries.value++
+            Log.d(TAG,"Set series val to ${_currentSeries.value}")
+
+        }
+        if (_currentSeries.value==1){
+            _currentExercise.value++
+            Log.d(TAG,"Set exercise val to ${_currentExercise.value}")
+        }
+
+        changeRestScreen()
+        startCounter()
     }
 }
