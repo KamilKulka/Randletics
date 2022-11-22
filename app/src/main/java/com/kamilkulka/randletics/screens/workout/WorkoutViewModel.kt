@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.kamilkulka.randletics.models.entities.Equipment
 import com.kamilkulka.randletics.models.entities.Exercise
 import com.kamilkulka.randletics.models.entities.Workout
+import com.kamilkulka.randletics.models.entities.relations.ExerciseWithEquipment
 import com.kamilkulka.randletics.repository.WorkoutsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,7 @@ class WorkoutViewModel @Inject constructor(
     private val _equipments = MutableStateFlow<List<Equipment>>(emptyList())
     val equipments = _equipments.asStateFlow()
 
-    private val _currentExerciseEquipments = MutableStateFlow<List<Equipment>>(emptyList())
+    private val _exercisesWithEquipments = MutableStateFlow<List<ExerciseWithEquipment>>(emptyList())
 
     private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
     val exercises = _exercises.asStateFlow()
@@ -92,6 +93,12 @@ class WorkoutViewModel @Inject constructor(
                             Log.d(TAG, "Equipments init")
                         }
                 }
+                viewModelScope.launch(Dispatchers.IO) {
+                    workoutsRepository.getAllExercisesWithEquipments().distinctUntilChanged().collect(){
+                        exercisesWithEquipments ->
+                        _exercisesWithEquipments.value=exercisesWithEquipments
+                    }
+                }
             }
         }
     }
@@ -124,22 +131,18 @@ class WorkoutViewModel @Inject constructor(
 
     fun getEquipmentForExercise(): String {
         if (_exercises.value.isNotEmpty() && _currentExercise.value > 0) {
-            viewModelScope.launch(Dispatchers.Main) {
-                workoutsRepository.getExerciseWithEquipmentsByExerciseId(
-                    _exercises.value[_currentExercise.value - 1].exerciseId.toString())
-                    .distinctUntilChanged().collect() { exerciseWithEquipment ->
-                        _currentExerciseEquipments.value = exerciseWithEquipment.equipments
-                    }
-            }
-            if (_currentExerciseEquipments.value.isNotEmpty()) {
+            val currentExerciseEquipments = _exercisesWithEquipments.value
+                .first {
+                    it.exercise.exerciseId == _exercises.value[_currentExercise.value-1].exerciseId}.equipments
+            if (currentExerciseEquipments.isNotEmpty()) {
                 var index = 0
                 var exercisesString = ""
-                while (index < _currentExerciseEquipments.value.size) {
-                    if (index == _currentExerciseEquipments.value.size - 1) {
-                        exercisesString += _currentExerciseEquipments.value[index].equipmentName
+                while (index < currentExerciseEquipments.size) {
+                    if (index == currentExerciseEquipments.size - 1) {
+                        exercisesString += currentExerciseEquipments[index].equipmentName
                     } else {
                         exercisesString =
-                            exercisesString + _currentExerciseEquipments.value[index].equipmentName + ", "
+                            exercisesString + currentExerciseEquipments[index].equipmentName + ", "
                     }
                     index++
                 }

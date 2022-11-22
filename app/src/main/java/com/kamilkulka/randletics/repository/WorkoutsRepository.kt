@@ -19,6 +19,7 @@ class WorkoutsRepository @Inject constructor(private val workoutDatabaseDao: Wor
     fun getAllEquipmentsWithExercises(): Flow<List<EquipmentWithExercise>> = workoutDatabaseDao.getEquipmentWithExercises().flowOn(Dispatchers.IO).conflate()
     fun getAllWorkoutsWithAllExercises(): Flow<List<WorkoutWithExercise>> = workoutDatabaseDao.getWorkoutsWithExercises().flowOn(Dispatchers.IO).conflate()
     fun getWorkoutWithExerciseByWorkoutId(id: String): Flow<WorkoutWithExercise> = workoutDatabaseDao.getWorkoutWithExercisesByWorkoutId(id).flowOn(Dispatchers.IO).conflate()
+    fun getAllExercisesWithEquipments(): Flow<List<ExerciseWithEquipment>> = workoutDatabaseDao.getAllExerciseWithEquipments().flowOn(Dispatchers.IO).conflate()
     fun getExerciseWithEquipmentsByExerciseId(id: String): Flow<ExerciseWithEquipment> = workoutDatabaseDao.getExerciseWithEquipmentsByExerciseId(id).flowOn(Dispatchers.IO).conflate()
     fun getAllWorkoutsWithEquipments(): Flow<List<WorkoutWithEquipment>> = workoutDatabaseDao.getWorkoutWithEquipments().flowOn(Dispatchers.IO).conflate()
     fun getWorkoutWithEquipmentsByWorkoutId(id: String):Flow<WorkoutWithEquipment> =workoutDatabaseDao.getWorkoutWithEquipmentsByWorkoutId(id).flowOn(Dispatchers.IO).conflate()
