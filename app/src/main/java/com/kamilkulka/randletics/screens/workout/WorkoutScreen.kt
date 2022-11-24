@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.TestModifierUpdaterLayout
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
@@ -305,9 +307,11 @@ fun WorkoutScreen(
                         }
                     }, modifier = Modifier.fillMaxWidth(0.75f))
                 }
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(DustyGreen), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(DustyGreen), contentAlignment = Alignment.Center
+                ) {
                     Button(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
@@ -315,19 +319,22 @@ fun WorkoutScreen(
                             contentColor = DustyGreen
                         ),
                         contentPadding = PaddingValues(
-                            top = 10.dp,
-                            bottom = 10.dp,
-                            start = 14.dp,
-                            end = 14.dp
+                            vertical = 10.dp,
+                            horizontal = 18.dp
                         ),
                         onClick = {
-                            if(viewModel.getExercisesLeft()==0 && viewModel.getSeries()==3){
-                                //TODO nav to end screen
-                            }else{
+                            if (viewModel.getExercisesLeft() == 0 && viewModel.getSeries() == 3) {
+                                navController.popBackStack(
+                                    route = RandleticsScreens.MainScreen.name,
+                                    inclusive = false
+                                )
+                            } else {
                                 viewModel.complete()
                             }
                         }) {
-                        Text(text = "Complete", fontSize = 24.sp)
+                        val buttonText =
+                            if (viewModel.getExercisesLeft() == 0 && viewModel.getSeries() == 3) "Complete" else "Next"
+                        Text(text = buttonText, fontSize = 24.sp)
                         Icon(
                             imageVector = Icons.Rounded.KeyboardArrowRight,
                             contentDescription = "Complete"
@@ -336,22 +343,41 @@ fun WorkoutScreen(
                 }
             }
         }
-        if (viewModel.exitPopup.collectAsState().value){
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                AlertDialog(
-                    title = { Text(text="Do you want to finish this workout?")},
-                    onDismissRequest = { viewModel.setExitPopup() },
+        if (viewModel.exitPopup.collectAsState().value) {
+            AlertDialog(
+                title = { Text(text = "Do you want to finish this workout?", fontSize = 16.sp) },
+                onDismissRequest = { viewModel.setExitPopup() },
                 confirmButton = {
-                    TextButton(onClick = {
-                        navController.popBackStack(route = RandleticsScreens.MainScreen.name, inclusive = false)
-                        viewModel.setDefaultState()}) {
-                        Text(text = "Yes")}},
-                dismissButton = {
-                    TextButton(onClick = { viewModel.setExitPopup() }) {
-                        Text(text = "Back to workout")
+                    TextButton(
+                        onClick = {
+                            viewModel.setExitPopup()
+                            navController.popBackStack(
+                                route = RandleticsScreens.MainScreen.name,
+                                inclusive = false
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = DimmedSageGreen,
+                            backgroundColor = Color.Transparent
+                        )
+                    ) {
+                        Text(text = "Yes", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                     }
-                })
-            }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = { viewModel.setExitPopup() },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = DimmedSageGreen,
+                            backgroundColor = Color.Transparent
+                        )
+                    ) {
+                        Text(text = "No", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                    }
+                }, backgroundColor = DustyGreen,
+                contentColor = DimmedSageGreen,
+                shape = RoundedCornerShape(20.dp)
+            )
         }
     }
 }
