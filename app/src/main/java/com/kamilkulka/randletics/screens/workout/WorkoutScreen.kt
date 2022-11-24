@@ -343,7 +343,8 @@ fun WorkoutScreen(
                     onDismissRequest = { viewModel.setExitPopup() },
                 confirmButton = {
                     TextButton(onClick = {
-                        navController.navigate(route = RandleticsScreens.MainScreen.name) }) {
+                        navController.popBackStack(route = RandleticsScreens.MainScreen.name, inclusive = false)
+                        viewModel.setDefaultState()}) {
                         Text(text = "Yes")}},
                 dismissButton = {
                     TextButton(onClick = { viewModel.setExitPopup() }) {

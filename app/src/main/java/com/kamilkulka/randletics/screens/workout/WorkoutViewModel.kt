@@ -36,7 +36,8 @@ class WorkoutViewModel @Inject constructor(
     private val _equipments = MutableStateFlow<List<Equipment>>(emptyList())
     val equipments = _equipments.asStateFlow()
 
-    private val _exercisesWithEquipments = MutableStateFlow<List<ExerciseWithEquipment>>(emptyList())
+    private val _exercisesWithEquipments =
+        MutableStateFlow<List<ExerciseWithEquipment>>(emptyList())
 
     private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
     val exercises = _exercises.asStateFlow()
@@ -44,7 +45,7 @@ class WorkoutViewModel @Inject constructor(
     private val _restScreen = MutableStateFlow(false)
     val restScreen = _restScreen.asStateFlow()
 
-    private val _exitPopup= MutableStateFlow(false)
+    private val _exitPopup = MutableStateFlow(false)
     val exitPopup = _exitPopup.asStateFlow()
 
     private val _timeLeft = MutableStateFlow(0L)
@@ -65,6 +66,7 @@ class WorkoutViewModel @Inject constructor(
         }
 
     }
+
     private var _currentExercise = MutableStateFlow(1)
     private var _currentSeries = MutableStateFlow(1)
 
@@ -73,41 +75,69 @@ class WorkoutViewModel @Inject constructor(
             if (workoutId.isNullOrEmpty() || workoutId == "null") {
                 Log.d(TAG, "WorkoutId delivered by SavedStateHandle is null")
             } else {
-                viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutById(workoutId).distinctUntilChanged()
-                        .collect { workout ->
-                            _workout.value = workout
-                            Log.d(TAG, "Workout init")
-                        }
-                }
-                viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId)
-                        .distinctUntilChanged()
-                        .collect { workoutWithExercises ->
-                            _exercises.value = workoutWithExercises.exercises
-                            Log.d(TAG, "Exercises init")
-                        }
-                }
-                viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId)
-                        .distinctUntilChanged()
-                        .collect { workoutWithEquipments ->
-                            _equipments.value = workoutWithEquipments.equipments
-                            Log.d(TAG, "Equipments init")
-                        }
-                }
-                viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getAllExercisesWithEquipments().distinctUntilChanged().collect(){
-                        exercisesWithEquipments ->
-                        _exercisesWithEquipments.value=exercisesWithEquipments
-                    }
-                }
+                getWorkout(workoutId)
+                getWorkoutWithExercise(workoutId)
+                getWorkoutWithEquipments(workoutId)
+                getAllExercisesWithEquipments()
             }
         }
     }
 
-    fun setExitPopup(){
-        _exitPopup.value=!_exitPopup.value
+    private fun getWorkout(workoutId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getWorkoutById(workoutId).distinctUntilChanged()
+                .collect { workout ->
+                    _workout.value = workout
+                    Log.d(TAG, "Workout init")
+                }
+        }
+    }
+
+    private fun getWorkoutWithExercise(workoutId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId)
+                .distinctUntilChanged()
+                .collect { workoutWithExercises ->
+                    _exercises.value = workoutWithExercises.exercises
+                    Log.d(TAG, "Exercises init")
+                }
+        }
+    }
+
+    private fun getWorkoutWithEquipments(workoutId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId)
+                .distinctUntilChanged()
+                .collect { workoutWithEquipments ->
+                    _equipments.value = workoutWithEquipments.equipments
+                    Log.d(TAG, "Equipments init")
+                }
+        }
+    }
+
+    private fun getAllExercisesWithEquipments() {
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutsRepository.getAllExercisesWithEquipments().distinctUntilChanged()
+                .collect() { exercisesWithEquipments ->
+                    _exercisesWithEquipments.value = exercisesWithEquipments
+                }
+        }
+    }
+    fun setDefaultState(){
+        _workout.value=null
+        _equipments.value = emptyList()
+        _exercisesWithEquipments.value = emptyList()
+        _exercises.value = emptyList()
+        _restScreen.value = false
+        _exitPopup.value = false
+        _timeLeft.value = 0L
+        _progressBar.value = 1f
+        _currentExercise.value = 1
+        _currentSeries.value = 1
+    }
+
+    fun setExitPopup() {
+        _exitPopup.value = !_exitPopup.value
     }
 
     fun getExercisesLeft(): Int {
@@ -137,10 +167,14 @@ class WorkoutViewModel @Inject constructor(
     }
 
     fun getEquipmentForExercise(): String {
-        if (_exercises.value.isNotEmpty() && _currentExercise.value > 0) {
+        if (_exercises.value.isNotEmpty() && _currentExercise.value > 0 &&
+            _exercisesWithEquipments.value.any {
+                it.exercise.exerciseId == _exercises.value[_currentExercise.value - 1].exerciseId }) {
+
             val currentExerciseEquipments = _exercisesWithEquipments.value
                 .first {
-                    it.exercise.exerciseId == _exercises.value[_currentExercise.value-1].exerciseId}.equipments
+                    it.exercise.exerciseId == _exercises.value[_currentExercise.value - 1].exerciseId
+                }.equipments
             if (currentExerciseEquipments.isNotEmpty()) {
                 var index = 0
                 var exercisesString = ""
@@ -177,14 +211,14 @@ class WorkoutViewModel @Inject constructor(
         counter.start()
     }
 
-    fun complete(){
-        if (_currentSeries.value==3){
-            _currentSeries.value=1
-        } else{
+    fun complete() {
+        if (_currentSeries.value == 3) {
+            _currentSeries.value = 1
+        } else {
             _currentSeries.value++
 
         }
-        if (_currentSeries.value==1){
+        if (_currentSeries.value == 1) {
             _currentExercise.value++
         }
 
