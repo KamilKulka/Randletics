@@ -44,6 +44,9 @@ class WorkoutViewModel @Inject constructor(
     private val _restScreen = MutableStateFlow(false)
     val restScreen = _restScreen.asStateFlow()
 
+    private val _exitPopup= MutableStateFlow(false)
+    val exitPopup = _exitPopup.asStateFlow()
+
     private val _timeLeft = MutableStateFlow(0L)
     val timeLeft = _timeLeft.asStateFlow()
 
@@ -101,6 +104,10 @@ class WorkoutViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setExitPopup(){
+        _exitPopup.value=!_exitPopup.value
     }
 
     fun getExercisesLeft(): Int {
@@ -173,15 +180,12 @@ class WorkoutViewModel @Inject constructor(
     fun complete(){
         if (_currentSeries.value==3){
             _currentSeries.value=1
-            Log.d(TAG,"Set series val to 1")
         } else{
             _currentSeries.value++
-            Log.d(TAG,"Set series val to ${_currentSeries.value}")
 
         }
         if (_currentSeries.value==1){
             _currentExercise.value++
-            Log.d(TAG,"Set exercise val to ${_currentExercise.value}")
         }
 
         changeRestScreen()

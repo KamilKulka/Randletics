@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.RandleticsScreens
+import com.kamilkulka.randletics.screens.main.MainScreen
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
@@ -77,7 +79,7 @@ fun WorkoutScreen(
                         start = 14.dp,
                         end = 14.dp
                     ),
-                    onClick = { /*TODO Finish Workout*/ }) {
+                    onClick = { viewModel.setExitPopup() }) {
                     Icon(imageVector = Icons.Rounded.Flag, contentDescription = "End")
                     Text(text = "Finish Workout", fontSize = 16.sp)
                 }
@@ -303,7 +305,9 @@ fun WorkoutScreen(
                         }
                     }, modifier = Modifier.fillMaxWidth(0.75f))
                 }
-                Box(modifier = Modifier.fillMaxSize().background(DustyGreen), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(DustyGreen), contentAlignment = Alignment.Center) {
                     Button(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
@@ -330,6 +334,22 @@ fun WorkoutScreen(
                         )
                     }
                 }
+            }
+        }
+        if (viewModel.exitPopup.collectAsState().value){
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                AlertDialog(
+                    title = { Text(text="Do you want to finish this workout?")},
+                    onDismissRequest = { viewModel.setExitPopup() },
+                confirmButton = {
+                    TextButton(onClick = {
+                        navController.navigate(route = RandleticsScreens.MainScreen.name) }) {
+                        Text(text = "Yes")}},
+                dismissButton = {
+                    TextButton(onClick = { viewModel.setExitPopup() }) {
+                        Text(text = "Back to workout")
+                    }
+                })
             }
         }
     }
