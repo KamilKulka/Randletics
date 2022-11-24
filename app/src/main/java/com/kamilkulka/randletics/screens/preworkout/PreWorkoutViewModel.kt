@@ -81,8 +81,8 @@ class PreWorkoutViewModel @Inject constructor(
         }
     }
 
-    fun setDeletePopUp(isVisible: Boolean) {
-        _deletePopUp.value = isVisible
+    fun setDeletePopUp() {
+        _deletePopUp.value = !_deletePopUp.value
     }
 
     fun setExercisesDropdown() {

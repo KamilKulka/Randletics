@@ -25,7 +25,7 @@ import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
-import com.kamilkulka.randletics.utils.PopUp
+import com.kamilkulka.randletics.utils.AlertPopUp
 import com.kamilkulka.randletics.utils.RowWithIcon
 
 @Composable
@@ -61,7 +61,7 @@ fun PreWorkoutScreen(
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable {
-                                    viewModel.setDeletePopUp(true)
+                                    viewModel.setDeletePopUp()
                                 })
                     }
                 }
@@ -171,25 +171,20 @@ fun PreWorkoutScreen(
             }
         }
 
-        if (viewModel.deletePopUp.collectAsState().value){
-            PopUp(modifier= Modifier
-                .width(240.dp)
-                .height(140.dp),
-                description = "Are you sure, you want to delete "
-                        +
-                        "\"${viewModel.workout.collectAsState().value?.title}\"?"
-                ,
-                leftButtonText = "Accept",
-                rightButtonText = "Delcine",
-                color = DustyGreen.copy(alpha = 0.75f),
-                onLeftButtonClick = {
+        if (viewModel.deletePopUp.collectAsState().value) {
+            AlertPopUp(
+                contentText = "Do you want to delete \"${viewModel.workout.collectAsState().value?.title}\" workout?",
+                onConfirmClick = {
                     viewModel.deleteWorkout()
                     navController.navigate(route = RandleticsScreens.MainScreen.name){
                         popUpTo(RandleticsScreens.PreWorkoutScreen.name){inclusive=true}
                     }
                 },
-                onRightButtonClick = {
-                    viewModel.setDeletePopUp(false)
+                onDismissClick = {
+                    viewModel.setDeletePopUp()
+                },
+                onDismissRequest = {
+                    viewModel.setDeletePopUp()
                 })
         }
     }

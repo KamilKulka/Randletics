@@ -29,6 +29,7 @@ import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.utils.AlertPopUp
 
 @Composable
 fun WorkoutScreen(
@@ -344,40 +345,21 @@ fun WorkoutScreen(
             }
         }
         if (viewModel.exitPopup.collectAsState().value) {
-            AlertDialog(
-                title = { Text(text = "Do you want to finish this workout?", fontSize = 16.sp) },
-                onDismissRequest = { viewModel.setExitPopup() },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.setExitPopup()
-                            navController.popBackStack(
-                                route = RandleticsScreens.MainScreen.name,
-                                inclusive = false
-                            )
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = DimmedSageGreen,
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "Yes", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    }
+            AlertPopUp(
+                contentText = "Do you want to finish this workout?",
+                onConfirmClick = {
+                    viewModel.setExitPopup()
+                    navController.popBackStack(
+                        route = RandleticsScreens.MainScreen.name,
+                        inclusive = false
+                    )
                 },
-                dismissButton = {
-                    TextButton(
-                        onClick = { viewModel.setExitPopup() },
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = DimmedSageGreen,
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "No", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-                    }
-                }, backgroundColor = DustyGreen,
-                contentColor = DimmedSageGreen,
-                shape = RoundedCornerShape(20.dp)
-            )
+                onDismissClick = {
+                    viewModel.setExitPopup()
+                },
+                onDismissRequest = {
+                    viewModel.setExitPopup()
+                })
         }
     }
 }
