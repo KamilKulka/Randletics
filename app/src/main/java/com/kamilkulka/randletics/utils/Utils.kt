@@ -1,5 +1,8 @@
 package com.kamilkulka.randletics.utils
 
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -13,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 
@@ -82,4 +86,23 @@ fun AlertPopUp(
         contentColor = DimmedSageGreen,
         shape = RoundedCornerShape(24.dp)
     )
+}
+
+@Composable
+fun WebViewBox(modifier: Modifier = Modifier, url: String) {
+    AndroidView(modifier = modifier, factory = {
+        WebView(it).apply {
+            settings.javaScriptEnabled = true
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            webViewClient = WebViewClient()
+            loadUrl(url)
+        }
+
+    },
+        update = {
+            it.loadUrl(url)
+        })
 }
