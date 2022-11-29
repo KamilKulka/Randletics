@@ -1,41 +1,38 @@
 package com.kamilkulka.randletics.screens.workout
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.TestModifierUpdaterLayout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.RandleticsScreens
-import com.kamilkulka.randletics.screens.main.MainScreen
 import com.kamilkulka.randletics.ui.theme.Celadon
 import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.SageGreen
 import com.kamilkulka.randletics.utils.AlertPopUp
+import kotlinx.coroutines.launch
 
 @Composable
 fun WorkoutScreen(
     navController: NavController,
     viewModel: WorkoutViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -194,6 +191,7 @@ fun WorkoutScreen(
                         modifier = Modifier.fillMaxWidth(0.75f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
                         Text(
                             text = viewModel.getExerciseTitle(),
                             modifier = Modifier
@@ -202,6 +200,29 @@ fun WorkoutScreen(
                             fontWeight = FontWeight.Medium,
                             color = DimmedSageGreen
                         )
+                        Spacer(modifier = Modifier.size(12.dp))
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()) {
+                        Button(
+                            modifier = Modifier.wrapContentSize(),
+                            shape = CircleShape,
+                            contentPadding = PaddingValues(
+                                vertical = 10.dp,
+                                horizontal = 14.dp
+                            ),
+                            colors=ButtonDefaults.buttonColors(
+                                backgroundColor = DimmedSageGreen,
+                                contentColor = DustyGreen),
+                            onClick = {
+                                viewModel.openTutorial(context)
+                            }) {
+                            Text(text = "Tutorial", fontSize = 16.sp)
+                            Icon(
+                                imageVector = Icons.Rounded.PlayArrow,
+                                contentDescription = null)
+                        }
+                    }
                         Spacer(modifier = Modifier.size(12.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(0.5f),
@@ -343,6 +364,7 @@ fun WorkoutScreen(
                     }
                 }
             }
+
         }
         if (viewModel.exitPopup.collectAsState().value) {
             AlertPopUp(
@@ -361,5 +383,10 @@ fun WorkoutScreen(
                     viewModel.setExitPopup()
                 })
         }
+
+
     }
+
 }
+
+

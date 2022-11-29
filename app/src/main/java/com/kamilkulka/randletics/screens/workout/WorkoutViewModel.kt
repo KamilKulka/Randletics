@@ -1,7 +1,12 @@
 package com.kamilkulka.randletics.screens.workout
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.CountDownTimer
 import android.util.Log
+import androidx.compose.material.DrawerValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -123,17 +128,10 @@ class WorkoutViewModel @Inject constructor(
                 }
         }
     }
-    fun setDefaultState(){
-        _workout.value=null
-        _equipments.value = emptyList()
-        _exercisesWithEquipments.value = emptyList()
-        _exercises.value = emptyList()
-        _restScreen.value = false
-        _exitPopup.value = false
-        _timeLeft.value = 0L
-        _progressBar.value = 1f
-        _currentExercise.value = 1
-        _currentSeries.value = 1
+
+    fun openTutorial(context: Context){
+        val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getTutorialUri()))
+        context.startActivity(urlIntent)
     }
 
     fun setExitPopup() {
@@ -147,6 +145,14 @@ class WorkoutViewModel @Inject constructor(
     fun getExerciseTitle(): String {
         if (_exercises.value.isNotEmpty()) {
             return _exercises.value[_currentExercise.value - 1].name
+        }
+        return ""
+    }
+
+    fun getTutorialUri(): String {
+        if (_exercises.value.isNotEmpty()) {
+            Log.d(TAG,_exercises.value[_currentExercise.value - 1].videoTutorial)
+            return _exercises.value[_currentExercise.value - 1].videoTutorial
         }
         return ""
     }
