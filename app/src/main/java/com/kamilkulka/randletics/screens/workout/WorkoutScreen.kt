@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,12 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.RandleticsScreens
-import com.kamilkulka.randletics.ui.theme.Celadon
-import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
+import com.kamilkulka.randletics.ui.theme.Beige
+import com.kamilkulka.randletics.ui.theme.LimeGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.utils.AlertPopUp
-import kotlinx.coroutines.launch
 
 @Composable
 fun WorkoutScreen(
@@ -36,7 +34,7 @@ fun WorkoutScreen(
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = SageGreen
+        color = BrightPurple
     ) {
         Column {
             Row(
@@ -61,7 +59,7 @@ fun WorkoutScreen(
                     )
                     Text(
                         text = "Exercises \nleft",
-                        color = Celadon,
+                        color = Beige,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
                         modifier = Modifier.padding(4.dp)
@@ -70,7 +68,7 @@ fun WorkoutScreen(
                 Button(
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = DimmedSageGreen,
+                        backgroundColor = LimeGreen,
                         contentColor = DustyGreen
                     ),
                     contentPadding = PaddingValues(
@@ -88,7 +86,7 @@ fun WorkoutScreen(
             if (viewModel.restScreen.collectAsState().value) {
                 Divider(
                     modifier = Modifier.padding(24.dp),
-                    color = DimmedSageGreen
+                    color = LimeGreen
                 )
                 Column(
                     modifier = Modifier
@@ -110,7 +108,7 @@ fun WorkoutScreen(
                                 withStyle(
                                     style = SpanStyle(
                                         fontSize = 42.sp,
-                                        color = Celadon,
+                                        color = Beige,
                                         fontWeight = FontWeight.Light
                                     )
                                 ) {
@@ -142,7 +140,7 @@ fun WorkoutScreen(
                             Text(
                                 text = "Seconds Left",
                                 fontSize = 16.sp,
-                                color = Celadon,
+                                color = Beige,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -158,7 +156,7 @@ fun WorkoutScreen(
                             modifier = Modifier.width(100.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = DimmedSageGreen,
+                                backgroundColor = LimeGreen,
                                 contentColor = DustyGreen
                             ),
                             contentPadding = PaddingValues(
@@ -198,7 +196,7 @@ fun WorkoutScreen(
                                 .fillMaxWidth(),
                             fontSize = 42.sp,
                             fontWeight = FontWeight.Medium,
-                            color = DimmedSageGreen
+                            color = LimeGreen
                         )
                         Spacer(modifier = Modifier.size(12.dp))
                         Row(modifier = Modifier
@@ -212,7 +210,7 @@ fun WorkoutScreen(
                                 horizontal = 14.dp
                             ),
                             colors=ButtonDefaults.buttonColors(
-                                backgroundColor = DimmedSageGreen,
+                                backgroundColor = LimeGreen,
                                 contentColor = DustyGreen),
                             onClick = {
                                 viewModel.openTutorial(context)
@@ -245,7 +243,7 @@ fun WorkoutScreen(
                                 Text(
                                     text = "Reps",
                                     fontSize = 16.sp,
-                                    color = Celadon,
+                                    color = Beige,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -264,7 +262,7 @@ fun WorkoutScreen(
                                 Text(buildAnnotatedString {
                                     withStyle(
                                         style = SpanStyle(
-                                            color = DimmedSageGreen,
+                                            color = LimeGreen,
                                             fontSize = 32.sp,
                                             fontWeight = FontWeight.Medium
                                         )
@@ -273,7 +271,7 @@ fun WorkoutScreen(
                                     }
                                     withStyle(
                                         style = SpanStyle(
-                                            color = Celadon,
+                                            color = Beige,
                                             fontSize = 18.sp
                                         )
                                     ) {
@@ -284,7 +282,7 @@ fun WorkoutScreen(
                                 Text(
                                     text = "Series",
                                     fontSize = 16.sp,
-                                    color = Celadon,
+                                    color = Beige,
                                     textAlign = TextAlign.Center
                                 )
 
@@ -295,7 +293,7 @@ fun WorkoutScreen(
                         Text(text = buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
-                                    color = DimmedSageGreen,
+                                    color = LimeGreen,
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -303,7 +301,7 @@ fun WorkoutScreen(
                                 append("Equipment:\n")
                             }
                             withStyle(
-                                style = SpanStyle(color = Celadon, fontSize = 16.sp)
+                                style = SpanStyle(color = Beige, fontSize = 16.sp)
                             ) {
                                 append(viewModel.getEquipmentForExercise())
                             }
@@ -313,13 +311,13 @@ fun WorkoutScreen(
                     Text(text = buildAnnotatedString {
                         withStyle(style = ParagraphStyle(lineHeight = 32.sp)) {
                             withStyle(
-                                style = SpanStyle(color = Celadon, fontSize = 16.sp)
+                                style = SpanStyle(color = Beige, fontSize = 16.sp)
                             ) {
                                 append("Next\n")
                             }
                             withStyle(
                                 style = SpanStyle(
-                                    color = DimmedSageGreen,
+                                    color = LimeGreen,
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -337,7 +335,7 @@ fun WorkoutScreen(
                     Button(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = DimmedSageGreen,
+                            backgroundColor = LimeGreen,
                             contentColor = DustyGreen
                         ),
                         contentPadding = PaddingValues(

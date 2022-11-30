@@ -8,9 +8,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.materialIcon
-import androidx.compose.material.icons.sharp.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -18,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
-import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Leaderboard
 import androidx.compose.material.icons.rounded.SettingsAccessibility
@@ -26,16 +22,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.models.entities.Workout
-import com.kamilkulka.randletics.ui.theme.Celadon
+import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.utils.RowWithIcon
 
 @Composable
@@ -105,7 +99,7 @@ fun WorkoutBox(
             .aspectRatio(1f)
             .padding(6.dp)
             .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
-            .background(SageGreen)
+            .background(BrightPurple)
             .clickable { onClick() }
     ) {
         val width = constraints.maxWidth
@@ -122,7 +116,7 @@ fun WorkoutBox(
             close()
         }
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPath(path = colorLayerPath, color = Celadon)
+            drawPath(path = colorLayerPath, color = Beige)
         }
         Box(
             modifier = Modifier
@@ -161,7 +155,7 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
                 onAddWorkout()
             },
         shape = RoundedCornerShape(corner = CornerSize(15.dp)),
-        border = BorderStroke(width = 8.dp, color = SageGreen)
+        border = BorderStroke(width = 8.dp, color = BrightPurple)
     ) {
         Column(
             modifier = Modifier

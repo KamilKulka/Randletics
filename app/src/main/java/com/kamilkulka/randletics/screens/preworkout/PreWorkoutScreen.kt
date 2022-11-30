@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.RandleticsScreens
-import com.kamilkulka.randletics.ui.theme.Celadon
+import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.utils.AlertPopUp
 import com.kamilkulka.randletics.utils.RowWithIcon
 
@@ -74,7 +74,7 @@ fun PreWorkoutScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            DustyGreen, SageGreen
+                            DustyGreen, BrightPurple
                         ), startY = 200f, endY = 600f
                     )
                 )
@@ -142,7 +142,7 @@ fun PreWorkoutScreen(
                                         end = 2.dp
                                     ),
                                     text = exercise.name,
-                                    color = Celadon
+                                    color = Beige
                                 )
                             }
                         }

@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.kamilkulka.randletics.ui.theme.Celadon
+import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.SageGreen
+import com.kamilkulka.randletics.ui.theme.BrightPurple
 
 @Composable
 fun NewWorkoutScreen(
@@ -80,7 +80,7 @@ fun NewWorkoutScreen(
                         onValueChange = viewModel::setDifficultySlider,
                         steps = 1,
                         colors = SliderDefaults.colors(
-                            thumbColor = SageGreen,
+                            thumbColor = BrightPurple,
                             activeTickColor = DustyGreen,
                             inactiveTickColor = DustyGreen,
                             activeTrackColor = DustyGreen,
@@ -119,7 +119,7 @@ fun NewWorkoutScreen(
                                     viewModel.createWorkout()
                                     navController.popBackStack()
                                 },
-                            color = SageGreen,
+                            color = BrightPurple,
                             shape = CircleShape
                         ) {
                             Box(
@@ -163,7 +163,7 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
             .fillMaxWidth()
             .padding(6.dp)
             .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
-            .background(Celadon),
+            .background(Beige),
         contentAlignment = Alignment.TopStart
     ) {
         Column(
@@ -198,7 +198,7 @@ fun CheckboxWithText(
             checked = checked,
             onCheckedChange = { onCheckedChange() },
             colors = CheckboxDefaults.colors(
-                checkedColor = SageGreen,
+                checkedColor = BrightPurple,
                 uncheckedColor = DustyGreen,
                 checkmarkColor = DustyGreen
             )

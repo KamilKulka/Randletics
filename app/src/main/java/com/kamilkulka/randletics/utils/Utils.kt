@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.kamilkulka.randletics.ui.theme.DimmedSageGreen
+import com.kamilkulka.randletics.ui.theme.LimeGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 
 @Composable
@@ -63,7 +63,7 @@ fun AlertPopUp(
                     onConfirmClick()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = DimmedSageGreen,
+                    contentColor = LimeGreen,
                     backgroundColor = Color.Transparent
                 )
             ) {
@@ -76,14 +76,14 @@ fun AlertPopUp(
                     onDismissClick()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = DimmedSageGreen,
+                    contentColor = LimeGreen,
                     backgroundColor = Color.Transparent
                 )
             ) {
                 Text(text = dismissButtonText, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             }
         }, backgroundColor = DustyGreen,
-        contentColor = DimmedSageGreen,
+        contentColor = LimeGreen,
         shape = RoundedCornerShape(24.dp)
     )
 }
