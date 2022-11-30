@@ -34,14 +34,29 @@ import com.kamilkulka.randletics.utils.RowWithIcon
 
 @Composable
 fun MainScreen(
-//    onAddWorkout: () -> Unit,
-//    onWorkoutClick: (Workout) -> Unit,
     navController: NavController,
-    modifier: Modifier = Modifier,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val workoutList = viewModel.workoutsList.collectAsState().value
-    Scaffold() { contentPadding ->
+    MainScreenContent(workoutList =workoutList,
+        countExercisesOfWorkout = {indexOfWorkout ->
+            viewModel.countExercisesOf(workoutList[indexOfWorkout]) },
+        onAddWorkout = {
+            navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)},
+        onWorkoutBoxClick = { indexOfWorkout ->
+        navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name +
+                "/${workoutList[indexOfWorkout].workoutId}")
+    })
+}
+
+@Composable
+private fun MainScreenContent(
+    workoutList: List<Workout>,
+    countExercisesOfWorkout: (Int)->Int, //TODO simplify function
+    onAddWorkout: () -> Unit,
+    onWorkoutBoxClick: (Int) -> Unit
+) {
+    Scaffold { contentPadding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,14 +86,16 @@ fun MainScreen(
                     modifier = Modifier.fillMaxHeight()
                 ) {
                     items(workoutList.size) { index ->
-                        WorkoutBox(workout = workoutList[index], viewModel = viewModel) {
-                            navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name + "/${workoutList[index].workoutId}")
+                        WorkoutBox(
+                            workout = workoutList[index],
+                            numberOfExercises = countExercisesOfWorkout(index)) {
+                           onWorkoutBoxClick(index)
                         }
                     }
                     if (workoutList.size < 4) {
                         item {
-                            AddWorkoutBox() {
-                                navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
+                            AddWorkoutBox {
+                                onAddWorkout()
                             }
                         }
                     }
@@ -90,8 +107,8 @@ fun MainScreen(
 
 @Composable
 fun WorkoutBox(
-    viewModel: MainViewModel,
     workout: Workout,
+    numberOfExercises: Int,
     onClick: () -> Unit = {}
 ) {
     BoxWithConstraints(
@@ -137,7 +154,7 @@ fun WorkoutBox(
             )
             RowWithIcon(
                 imageVector = Icons.Rounded.SettingsAccessibility,
-                text = viewModel.countExercisesOf(workout).toString(),
+                text = "$numberOfExercises",
                 contentDescription = "Exercises",
             )
         }
