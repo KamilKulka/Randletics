@@ -3,7 +3,7 @@ package com.kamilkulka.randletics
 enum class RandleticsScreens {
     MainScreen,
     NewWorkoutScreen,
-    ExercisesListScreen,
+    ExercisesScreen,
     PreWorkoutScreen,
     WorkoutScreen,
     SettingsScreen;
@@ -12,7 +12,7 @@ enum class RandleticsScreens {
             when(route?.substringBefore("/")){
                 MainScreen.name -> MainScreen
                 NewWorkoutScreen.name -> NewWorkoutScreen
-                ExercisesListScreen.name -> ExercisesListScreen
+                ExercisesScreen.name -> ExercisesScreen
                 PreWorkoutScreen.name  -> PreWorkoutScreen
                 WorkoutScreen.name -> WorkoutScreen
                 SettingsScreen.name -> SettingsScreen

@@ -156,7 +156,7 @@ fun RandleticsNavigation(
             )
         }
 
-        composable(RandleticsScreens.ExercisesListScreen.name) {
+        composable(RandleticsScreens.ExercisesScreen.name) {
             ExercisesScreen(navController = navController)
         }
         
