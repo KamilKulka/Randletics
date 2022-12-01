@@ -3,8 +3,11 @@ package com.kamilkulka.randletics.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.kamilkulka.randletics.converters.DifficultyConverter
+import com.kamilkulka.randletics.converters.EquipmentTypeConverter
+import com.kamilkulka.randletics.converters.MuscleTypeConverter
+import com.kamilkulka.randletics.converters.UUIDConverter
 import com.kamilkulka.randletics.models.entities.*
-import com.kamilkulka.randletics.utils.*
 
 @Database(
     entities = [

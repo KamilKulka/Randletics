@@ -1,4 +1,4 @@
-package com.kamilkulka.randletics.utils
+package com.kamilkulka.randletics.converters
 
 import androidx.room.TypeConverter
 import com.kamilkulka.randletics.models.Difficulty
