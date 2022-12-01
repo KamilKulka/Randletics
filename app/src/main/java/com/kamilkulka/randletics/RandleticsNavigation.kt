@@ -13,7 +13,6 @@ import com.kamilkulka.randletics.screens.exercises.ExercisesScreen
 import com.kamilkulka.randletics.screens.main.MainScreen
 import com.kamilkulka.randletics.screens.newworkout.NewWorkoutScreen
 import com.kamilkulka.randletics.screens.preworkout.PreWorkoutScreen
-import java.util.*
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kamilkulka.randletics.screens.workout.WorkoutScreen
@@ -157,7 +156,7 @@ fun RandleticsNavigation(
         }
 
         composable(RandleticsScreens.ExercisesListScreen.name) {
-            ExercisesScreen()
+            ExercisesScreen(navController = navController)
         }
     }
 }
