@@ -15,6 +15,7 @@ import com.kamilkulka.randletics.screens.newworkout.NewWorkoutScreen
 import com.kamilkulka.randletics.screens.preworkout.PreWorkoutScreen
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.kamilkulka.randletics.screens.settings.SettingsScreen
 import com.kamilkulka.randletics.screens.workout.WorkoutScreen
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -157,6 +158,10 @@ fun RandleticsNavigation(
 
         composable(RandleticsScreens.ExercisesListScreen.name) {
             ExercisesScreen(navController = navController)
+        }
+        
+        composable(RandleticsScreens.SettingsScreen.name){
+            SettingsScreen(navController = navController)
         }
     }
 }
