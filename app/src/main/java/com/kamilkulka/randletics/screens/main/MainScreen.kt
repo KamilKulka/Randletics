@@ -47,8 +47,13 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val workoutList = viewModel.workoutsList.collectAsState().value
+
     ModalDrawer(drawerContent = {
-        DrawerContent(modifier = Modifier.fillMaxSize())
+        DrawerContent(modifier = Modifier.fillMaxSize(),
+            enableAddingWorkout = workoutList.size<5,
+            onAddWorkout = {
+                navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
+            })
     }) {
         MainScreenContent(workoutList = workoutList,
             countExercisesOfWorkout = { indexOfWorkout ->
@@ -110,7 +115,7 @@ private fun MainScreenContent(
                             onWorkoutBoxClick(index)
                         }
                     }
-                    if (workoutList.size < 4) {
+                    if (workoutList.size < 5) {
                         item {
                             AddWorkoutBox {
                                 onAddWorkout()
@@ -124,7 +129,7 @@ private fun MainScreenContent(
 }
 
 @Composable
-fun DrawerContent(modifier: Modifier=Modifier){
+fun DrawerContent(modifier: Modifier=Modifier,onAddWorkout: () -> Unit, enableAddingWorkout:Boolean = true){
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Image(painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo",
@@ -136,15 +141,16 @@ fun DrawerContent(modifier: Modifier=Modifier){
             val drawerButtonModifier = Modifier.padding(vertical = 18.dp)
             val drawerButtonTextStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
 
-            TextButton(onClick = { /*TODO*/ },
+            TextButton(onClick = {},
                 enabled = false,
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
                     disabledContentColor =  BubblegumPink)) {
                 Text(text = "Main Screen", style = drawerButtonTextStyle)
             }
-            TextButton(enabled = false, onClick = { /*TODO*/ },
+            TextButton( onClick = { onAddWorkout() },
                 modifier = drawerButtonModifier,
+                enabled = enableAddingWorkout,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Black,
                     disabledContentColor = Color.Black.copy(0.4f))) {
