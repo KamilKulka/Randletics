@@ -18,7 +18,14 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Leaderboard
 import androidx.compose.material.icons.rounded.SettingsAccessibility
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,7 +37,9 @@ import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.BrightPurple
+import com.kamilkulka.randletics.ui.theme.BubblegumPink
 import com.kamilkulka.randletics.utils.RowWithIcon
+import org.w3c.dom.Text
 
 @Composable
 fun MainScreen(
@@ -38,21 +47,29 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val workoutList = viewModel.workoutsList.collectAsState().value
-    MainScreenContent(workoutList =workoutList,
-        countExercisesOfWorkout = {indexOfWorkout ->
-            viewModel.countExercisesOf(workoutList[indexOfWorkout]) },
-        onAddWorkout = {
-            navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)},
-        onWorkoutBoxClick = { indexOfWorkout ->
-        navController.navigate(route = RandleticsScreens.PreWorkoutScreen.name +
-                "/${workoutList[indexOfWorkout].workoutId}")
-    })
+    ModalDrawer(drawerContent = {
+        DrawerContent(modifier = Modifier.fillMaxSize())
+    }) {
+        MainScreenContent(workoutList = workoutList,
+            countExercisesOfWorkout = { indexOfWorkout ->
+                viewModel.countExercisesOf(workoutList[indexOfWorkout])
+            },
+            onAddWorkout = {
+                navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
+            },
+            onWorkoutBoxClick = { indexOfWorkout ->
+                navController.navigate(
+                    route = RandleticsScreens.PreWorkoutScreen.name +
+                            "/${workoutList[indexOfWorkout].workoutId}"
+                )
+            })
+    }
 }
 
 @Composable
 private fun MainScreenContent(
     workoutList: List<Workout>,
-    countExercisesOfWorkout: (Int)->Int, //TODO simplify function
+    countExercisesOfWorkout: (Int) -> Int, //TODO simplify function
     onAddWorkout: () -> Unit,
     onWorkoutBoxClick: (Int) -> Unit
 ) {
@@ -88,8 +105,9 @@ private fun MainScreenContent(
                     items(workoutList.size) { index ->
                         WorkoutBox(
                             workout = workoutList[index],
-                            numberOfExercises = countExercisesOfWorkout(index)) {
-                           onWorkoutBoxClick(index)
+                            numberOfExercises = countExercisesOfWorkout(index)
+                        ) {
+                            onWorkoutBoxClick(index)
                         }
                     }
                     if (workoutList.size < 4) {
@@ -100,6 +118,51 @@ private fun MainScreenContent(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun DrawerContent(modifier: Modifier=Modifier){
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(1.5f).padding(vertical = 42.dp))
+        Divider()
+        Column(modifier = Modifier
+            .fillMaxWidth().fillMaxHeight()
+            .padding(horizontal = 64.dp)) {
+            val drawerButtonModifier = Modifier.padding(vertical = 18.dp)
+            val drawerButtonTextStyle = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
+
+            TextButton(onClick = { /*TODO*/ },
+                enabled = false,
+                modifier = drawerButtonModifier,
+                colors = ButtonDefaults.textButtonColors(
+                    disabledContentColor =  BubblegumPink)) {
+                Text(text = "Main Screen", style = drawerButtonTextStyle)
+            }
+            TextButton(enabled = false, onClick = { /*TODO*/ },
+                modifier = drawerButtonModifier,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.Black,
+                    disabledContentColor = Color.Black.copy(0.4f))) {
+                Text(text = "Add Workout", style = drawerButtonTextStyle)
+            }
+            TextButton(onClick = { /*TODO*/ },
+                modifier = drawerButtonModifier,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.Black,
+                    disabledContentColor = Color.Black.copy(0.4f))) {
+                Text(text = "Exercises", style = drawerButtonTextStyle)
+            }
+            TextButton(onClick = { /*TODO*/ },
+                modifier = drawerButtonModifier,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = Color.Black,
+                    disabledContentColor = Color.Black.copy(0.4f))) {
+                Text(text = "Settings", style = drawerButtonTextStyle)
             }
         }
     }
