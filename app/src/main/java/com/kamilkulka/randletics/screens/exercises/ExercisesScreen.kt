@@ -1,22 +1,18 @@
 package com.kamilkulka.randletics.screens.exercises
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.KeyboardArrowLeft
-import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,32 +47,55 @@ fun ExercisesScreen(navController: NavController,
                 modifier = Modifier.padding(start = 32.dp,end = 32.dp, bottom = 32.dp))
             Divider()
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.SpaceAround) {
                 FilterDropDown(
+                    modifier = Modifier.weight(1f),
                     filterCategoryName = "Difficulty",
-                    chosenElement = "All",
+                    chosenElement = viewModel.getDifficultyFilterSelected(),
                     expanded = viewModel.difficultyDropDown.collectAsState().value,
                     onDropButtonClick = { viewModel.setDifficultyDropDown() },
                     onDismissRequest = { viewModel.setDifficultyDropDown() }) {
-                    Text(text = "aaa")
-                    Text(text = "bbb")
-                    Text(text = "ccc")
+                    FilterRow(text = "All") {
+                        viewModel.setDifficultyFilter(null)
+                        viewModel.setDifficultyDropDown()
+                    }
+                    viewModel.difficulties.forEach { difficulty ->
+                        FilterRow(text = difficulty.name.substring(0,1)+difficulty.name.substring(1).lowercase()) {
+                            viewModel.setDifficultyFilter(difficulty)
+                            viewModel.setDifficultyDropDown()
+                        }
+                    }
                 }
                 FilterDropDown(
+                    modifier = Modifier.weight(1f),
                     filterCategoryName = "Muscle",
-                    chosenElement = "All",
+                    chosenElement = viewModel.getMuscleFilterSelected(),
                     expanded = viewModel.muscleCategoryDropDown.collectAsState().value,
                     onDropButtonClick = { viewModel.setMuscleCategoryDropDown() },
                     onDismissRequest = { viewModel.setMuscleCategoryDropDown() }) {
-                    Text(text = "aaa")
-                    Text(text = "bbb")
-                    Text(text = "ccc")
+                    FilterRow(text = "All") {
+                        viewModel.setMuscleFilter(null)
+                        viewModel.setMuscleCategoryDropDown()
+                    }
+                    viewModel.muscleType.forEach { muscleType ->
+                        FilterRow(text = muscleType.name.substring(0,1)+muscleType.name.substring(1).lowercase()) {
+                            viewModel.setMuscleFilter(muscleType)
+                            viewModel.setMuscleCategoryDropDown()
+                        }
+                    }
                 }
             }
             Divider()
         }
     }
+}
+
+@Composable
+fun FilterRow(text: String,onClick: ()->Unit){
+    Text(text = text, modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp).clickable { onClick() })
 }
 
 @Composable

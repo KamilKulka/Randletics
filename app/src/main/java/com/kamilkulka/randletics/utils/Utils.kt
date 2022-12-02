@@ -116,7 +116,7 @@ fun FilterDropDown(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = filterCategoryName,
