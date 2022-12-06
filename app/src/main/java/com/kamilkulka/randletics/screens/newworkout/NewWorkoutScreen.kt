@@ -16,12 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.BrightPurple
@@ -39,13 +41,19 @@ fun NewWorkoutScreen(
                 contentPadding = PaddingValues(12.dp),
                 backgroundColor = Color.Transparent
             ) {
-                Row(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 18.dp),
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 18.dp),
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Add Workout", fontSize = 24.sp, color = Color.Black, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = stringResource(id = R.string.label_add_workout),
+                        fontSize = 24.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }) { contentPadding ->
@@ -55,7 +63,7 @@ fun NewWorkoutScreen(
                 .padding(contentPadding)
         ) {
             item {
-                FillInContentBox(title = "Title:") {
+                FillInContentBox(title = stringResource(id = R.string.label_title) + ":") {
                     BasicTextField(
                         textStyle = TextStyle(fontSize = 20.sp),
                         value = viewModel.workoutTitle.collectAsState().value,
@@ -65,15 +73,15 @@ fun NewWorkoutScreen(
                 }
             }
             item {
-                FillInContentBox(title = "Difficulty:") {
+                FillInContentBox(title = stringResource(id = R.string.label_difficulty) + ":") {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentHeight(), horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Easy")
-                        Text(text = "Medium")
-                        Text(text = "Hard")
+                        Text(text = stringResource(id = R.string.difficulty_easy))
+                        Text(text = stringResource(id = R.string.difficulty_medium))
+                        Text(text = stringResource(id = R.string.difficulty_hard))
                     }
                     Slider(
                         value = viewModel.difficultySlider.collectAsState().value,
@@ -91,7 +99,7 @@ fun NewWorkoutScreen(
 
             }
             item {
-                FillInContentBox(title = "Equipment:") {
+                FillInContentBox(title = stringResource(id = R.string.label_equipment) + ":") {
                     for (equipment in equipmentList) {
                         CheckboxWithText(
                             text = equipment.equipmentName,
@@ -128,7 +136,11 @@ fun NewWorkoutScreen(
                                     .padding(8.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = "Add Workout", fontSize = 24.sp, color = DustyGreen)
+                                Text(
+                                    text = stringResource(id = R.string.label_add_workout),
+                                    fontSize = 24.sp,
+                                    color = DustyGreen
+                                )
                             }
                         }
 
@@ -143,7 +155,7 @@ fun NewWorkoutScreen(
                                 modifier = Modifier.clickable {
                                     navController.popBackStack()
                                 },
-                                text = "Discard Workout",
+                                text = stringResource(id = R.string.label_discard_workout),
                                 fontSize = 20.sp,
                                 color = MaterialTheme.colors.error
                             )
@@ -184,7 +196,7 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
 
 @Composable
 fun CheckboxWithText(
-    text: String = "Sample",
+    text: String = "",
     checked: Boolean = false,
     onCheckedChange: () -> Unit = {}
 ) {
@@ -204,38 +216,5 @@ fun CheckboxWithText(
             )
         )
         Text(text = text, fontSize = 18.sp)
-    }
-}
-
-@Composable
-fun FillInContentBoxPreview() {
-    FillInContentBox(title = "Title:")
-}
-
-@Composable
-fun NewWorkoutScreenPreview() {
-    Scaffold(topBar = {
-        TopAppBar(
-            elevation = 0.dp,
-            contentPadding = PaddingValues(12.dp),
-            backgroundColor = Color.Transparent
-        ) {
-            Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(48.dp)
-                    .clickable {
-//                        navController.popBackStack()
-                    })
-
-        }
-    }) { contentPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
-
-        }
     }
 }

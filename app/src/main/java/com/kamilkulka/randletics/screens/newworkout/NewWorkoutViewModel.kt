@@ -18,6 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: WorkoutsRepository) :
     ViewModel() {
+    companion object {
+        const val TAG = "NewWorkoutViewModel"
+    }
+
     private val _exercisesList = MutableStateFlow<List<Exercise>>(emptyList())
     private val _equipmentsWithExercises =
         MutableStateFlow<List<EquipmentWithExercise>>(emptyList())
@@ -37,7 +41,7 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
             workoutsRepository.getAllEquipments().distinctUntilChanged()
                 .collect { listOfEquipments ->
                     if (listOfEquipments.isEmpty()) {
-                        Log.d("Empty", "Equipment list is empty!")
+                        Log.d(TAG, "Equipment list is empty!")
                     } else {
                         _equipmentList.value = listOfEquipments
                         for (i in 1..listOfEquipments.size) equipmentsState.add(
@@ -45,7 +49,6 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
                                 true
                             )
                         )
-                        Log.d("Equipment", "Init")
                     }
                 }
         }
@@ -53,10 +56,9 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
             workoutsRepository.getAllExercises().distinctUntilChanged()
                 .collect { listOfExercises ->
                     if (listOfExercises.isEmpty()) {
-                        Log.d("Empty", "Exercises list is empty!")
+                        Log.d(TAG, "Exercises list is empty!")
                     } else {
                         _exercisesList.value = listOfExercises
-                        Log.d("Exercises", "Init")
                     }
                 }
         }
@@ -64,14 +66,14 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
             workoutsRepository.getAllEquipmentsWithExercises().distinctUntilChanged()
                 .collect() { listOfEquipmentsWithExercises ->
                     if (listOfEquipmentsWithExercises.isEmpty()) {
-                        Log.d("Empty", "EquipmentsWithExercises list is empty!")
+                        Log.d(TAG, "EquipmentsWithExercises list is empty!")
                     } else {
                         _equipmentsWithExercises.value = listOfEquipmentsWithExercises
-                        Log.d("EquipmentsWithExercises", "Init")
                     }
                 }
         }
     }
+
     private fun addExercisesToCollection(
         collectionFrom: MutableList<Exercise>,
         collectionTo: MutableList<Exercise>,
@@ -80,11 +82,13 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
         quantity: Int = 1,
     ) {
         val listOfExercisesForMuscle =
-            collectionFrom.filter { exercise -> exercise.muscleGroup == muscleGroup && when(difficulty){
-                Difficulty.EASY -> exercise.difficulty==Difficulty.EASY
-                Difficulty.MEDIUM ->exercise.difficulty==Difficulty.EASY || exercise.difficulty==Difficulty.MEDIUM
-                Difficulty.HARD ->exercise.difficulty==Difficulty.EASY || exercise.difficulty==Difficulty.MEDIUM || exercise.difficulty==Difficulty.HARD
-            } }
+            collectionFrom.filter { exercise ->
+                exercise.muscleGroup == muscleGroup && when (difficulty) {
+                    Difficulty.EASY -> exercise.difficulty == Difficulty.EASY
+                    Difficulty.MEDIUM -> exercise.difficulty == Difficulty.EASY || exercise.difficulty == Difficulty.MEDIUM
+                    Difficulty.HARD -> exercise.difficulty == Difficulty.EASY || exercise.difficulty == Difficulty.MEDIUM || exercise.difficulty == Difficulty.HARD
+                }
+            }
         if (quantity <= listOfExercisesForMuscle.size && quantity > 0) {
             collectionTo.addAll(
                 listOfExercisesForMuscle.asSequence().shuffled().take(quantity).toList()
@@ -294,21 +298,22 @@ class NewWorkoutViewModel @Inject constructor(private val workoutsRepository: Wo
         viewModelScope.launch {
             workoutsRepository.insertWorkout(
                 workout = Workout(
-                    workoutId=workoutUUID,
+                    workoutId = workoutUUID,
                     title = title,
                     difficulty = workoutDifficulty
                 )
             )
-            for (exercise in finalExercisesList){
+            for (exercise in finalExercisesList) {
                 workoutsRepository.insertWorkoutExercise(
-                    WorkoutExerciseCrossRef(workoutUUID,exercise.exerciseId))
+                    WorkoutExerciseCrossRef(workoutUUID, exercise.exerciseId)
+                )
             }
-            for (equipment in _equipmentList.value){
+            for (equipment in _equipmentList.value) {
                 val index = _equipmentList.value.indexOf(equipment)
 
-                if (equipmentsState[index].value){
+                if (equipmentsState[index].value) {
                     workoutsRepository.insertWorkoutEquipment(
-                        WorkoutEquipmentCrossRef(workoutUUID,equipment.equipmentId)
+                        WorkoutEquipmentCrossRef(workoutUUID, equipment.equipmentId)
                     )
                 }
             }

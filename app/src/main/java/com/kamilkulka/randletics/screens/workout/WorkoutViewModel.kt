@@ -5,8 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.compose.material.DrawerValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -93,7 +91,6 @@ class WorkoutViewModel @Inject constructor(
             workoutsRepository.getWorkoutById(workoutId).distinctUntilChanged()
                 .collect { workout ->
                     _workout.value = workout
-                    Log.d(TAG, "Workout init")
                 }
         }
     }
@@ -104,7 +101,6 @@ class WorkoutViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .collect { workoutWithExercises ->
                     _exercises.value = workoutWithExercises.exercises
-                    Log.d(TAG, "Exercises init")
                 }
         }
     }
@@ -115,7 +111,6 @@ class WorkoutViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .collect { workoutWithEquipments ->
                     _equipments.value = workoutWithEquipments.equipments
-                    Log.d(TAG, "Equipments init")
                 }
         }
     }
@@ -129,7 +124,7 @@ class WorkoutViewModel @Inject constructor(
         }
     }
 
-    fun openTutorial(context: Context){
+    fun openTutorial(context: Context) {
         val urlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getTutorialUri()))
         context.startActivity(urlIntent)
     }
@@ -151,7 +146,7 @@ class WorkoutViewModel @Inject constructor(
 
     fun getTutorialUri(): String {
         if (_exercises.value.isNotEmpty()) {
-            Log.d(TAG,_exercises.value[_currentExercise.value - 1].videoTutorial)
+            Log.d(TAG, _exercises.value[_currentExercise.value - 1].videoTutorial)
             return _exercises.value[_currentExercise.value - 1].videoTutorial
         }
         return ""
@@ -172,10 +167,12 @@ class WorkoutViewModel @Inject constructor(
         return _currentSeries.value
     }
 
-    fun getEquipmentForExercise(): String {
+    fun getEquipmentForExercise(): String? {
         if (_exercises.value.isNotEmpty() && _currentExercise.value > 0 &&
             _exercisesWithEquipments.value.any {
-                it.exercise.exerciseId == _exercises.value[_currentExercise.value - 1].exerciseId }) {
+                it.exercise.exerciseId == _exercises.value[_currentExercise.value - 1].exerciseId
+            }
+        ) {
 
             val currentExerciseEquipments = _exercisesWithEquipments.value
                 .first {
@@ -196,12 +193,12 @@ class WorkoutViewModel @Inject constructor(
                 return exercisesString
             }
         }
-        return "No equipment"
+        return null
     }
 
-    fun getNextExerciseTitle(): String {
+    fun getNextExerciseTitle(): String? {
         if (_exercises.value.size > _currentExercise.value) return _exercises.value[_currentExercise.value].name
-        return "End of workout"
+        return null
     }
 
     private fun changeRestScreen() {

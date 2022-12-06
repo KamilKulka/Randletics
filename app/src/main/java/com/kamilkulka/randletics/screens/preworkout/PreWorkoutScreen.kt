@@ -16,11 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.DustyGreen
@@ -41,23 +43,24 @@ fun PreWorkoutScreen(
                 backgroundColor = Color.Transparent
             ) {
                 Row(
-                    modifier= Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowLeft,
-                        contentDescription = "Back",
+                        contentDescription = null,
                         modifier = Modifier
                             .size(48.dp)
                             .clickable {
                                 navController.popBackStack()
                             })
-                    if (viewModel.workout.collectAsState().value!=null){
+                    if (viewModel.workout.collectAsState().value != null) {
                         Icon(
                             imageVector = Icons.Rounded.Delete,
-                            contentDescription = "Delete Workout",
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(32.dp)
                                 .clickable {
@@ -86,7 +89,7 @@ fun PreWorkoutScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = viewModel.workout.collectAsState().value?.title ?: "" ,
+                    text = viewModel.workout.collectAsState().value?.title ?: "",
                     fontSize = 34.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -111,6 +114,7 @@ fun PreWorkoutScreen(
                         .padding(4.dp),
                     imageVector = Icons.Rounded.FitnessCenter,
                     text = viewModel.getAllEquipmentsString()
+                        ?: stringResource(id = R.string.label_no_equipment)
                 )
 
                 RowWithIcon(
@@ -118,17 +122,17 @@ fun PreWorkoutScreen(
                         .wrapContentSize()
                         .padding(4.dp),
                     imageVector = Icons.Rounded.SettingsAccessibility,
-                    text = "Exercises: ${viewModel.countExercisesOf()}"
+                    text = stringResource(id = R.string.label_exercises) + ": ${viewModel.countExercisesOf()}"
                 )
 
                 if (viewModel.countExercisesOf() > 0) {
                     if (viewModel.exercisesDropdown.collectAsState().value) {
                         Icon(imageVector = Icons.Rounded.ExpandLess,
-                            contentDescription = "Expand Exercises",
+                            contentDescription = null,
                             modifier = Modifier.clickable { viewModel.setExercisesDropdown() })
                     } else {
                         Icon(imageVector = Icons.Rounded.ExpandMore,
-                            contentDescription = "Expand Exercises",
+                            contentDescription = null,
                             modifier = Modifier.clickable { viewModel.setExercisesDropdown() })
                     }
                     if (viewModel.exercisesDropdown.collectAsState().value) {
@@ -150,34 +154,36 @@ fun PreWorkoutScreen(
                 }
             }
         }
-        if(viewModel.workout.collectAsState().value != null){
+        if (viewModel.workout.collectAsState().value != null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Button(
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(backgroundColor = DustyGreen),
-                    contentPadding= PaddingValues(8.dp),
+                    contentPadding = PaddingValues(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(start = 48.dp, end = 48.dp, top = 32.dp, bottom = 32.dp),
                     onClick = {
-                        navController.navigate(
+                        if (viewModel.workout.value != null) {
+                            navController.navigate(
                                 route = RandleticsScreens.WorkoutScreen.name +
-                                        "/${viewModel.workout.value?.workoutId ?: "Err!!"}"
+                                        "/${viewModel.workout.value!!.workoutId}"
                             )
+                        }
                     }) {
-                    Text(text = "Start Workout", fontSize = 24.sp)
+                    Text(text = stringResource(id = R.string.label_start_workout), fontSize = 24.sp)
                 }
             }
         }
 
         if (viewModel.deletePopUp.collectAsState().value) {
             AlertPopUp(
-                contentText = "Do you want to delete \"${viewModel.workout.collectAsState().value?.title}\" workout?",
+                contentText = stringResource(id = R.string.delete_workout_inquiry) + "\"${viewModel.workout.collectAsState().value?.title}\"" + "?",
                 onConfirmClick = {
                     viewModel.deleteWorkout()
-                    navController.navigate(route = RandleticsScreens.MainScreen.name){
-                        popUpTo(RandleticsScreens.PreWorkoutScreen.name){inclusive=true}
+                    navController.navigate(route = RandleticsScreens.MainScreen.name) {
+                        popUpTo(RandleticsScreens.PreWorkoutScreen.name) { inclusive = true }
                     }
                 },
                 onDismissClick = {

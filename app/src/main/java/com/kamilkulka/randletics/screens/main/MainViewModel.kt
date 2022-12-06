@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,10 +21,10 @@ class MainViewModel @Inject constructor(private val workoutsRepository: Workouts
     companion object {
         const val TAG = "MainViewModel"
     }
+
     private val _workoutsWithExercises = MutableStateFlow<List<WorkoutWithExercise>>(emptyList())
     private val _workoutsList = MutableStateFlow<List<Workout>>(emptyList())
     val workoutsList = _workoutsList.asStateFlow()
-
 
 
     init {

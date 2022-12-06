@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -20,15 +21,18 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
+import com.kamilkulka.randletics.R
+import com.kamilkulka.randletics.models.Difficulty
+import com.kamilkulka.randletics.models.Muscle
 import com.kamilkulka.randletics.ui.theme.LimeGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
 
 @Composable
 fun RowWithIcon(
-    modifier: Modifier = Modifier.wrapContentSize(),
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     text: String = "",
-    contentDescription: String = "",
+    contentDescription: String? = null,
     iconSize: Dp = 32.dp,
     spacerSize: Dp = 8.dp,
     fontSize: TextUnit = 20.sp,
@@ -50,9 +54,9 @@ fun RowWithIcon(
 fun AlertPopUp(
     modifier: Modifier = Modifier,
     contentText: String,
-    confirmButtonText: String = "Yes",
+    confirmButtonText: String = stringResource(id = R.string.label_yes),
     onConfirmClick: () -> Unit,
-    dismissButtonText: String = "No",
+    dismissButtonText: String = stringResource(id = R.string.label_no),
     onDismissClick: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -145,5 +149,29 @@ fun FilterDropDown(
                 content = content
             )
         }
+    }
+}
+
+@Composable
+fun getDifficultyString(difficulty: Difficulty?):String {
+    return when(difficulty){
+        Difficulty.HARD -> stringResource(id = R.string.difficulty_hard)
+        Difficulty.MEDIUM -> stringResource(id = R.string.difficulty_medium)
+        Difficulty.EASY -> stringResource(id = R.string.difficulty_easy)
+        null -> stringResource(id = R.string.label_all)
+    }
+}
+
+@Composable
+fun getMuscleTypeString(muscle: Muscle?): String{
+    return when(muscle){
+        Muscle.CORE -> stringResource(id = R.string.muscle_core)
+        Muscle.LEGS -> stringResource(id = R.string.muscle_legs)
+        Muscle.TRICEPS -> stringResource(id = R.string.muscle_triceps)
+        Muscle.BICEPS -> stringResource(id = R.string.muscle_biceps)
+        Muscle.SHOULDERS -> stringResource(id = R.string.muscle_shoulders)
+        Muscle.CHEST -> stringResource(id = R.string.muscle_chest)
+        Muscle.BACK -> stringResource(id = R.string.muscle_back)
+        null -> stringResource(id = R.string.label_all)
     }
 }

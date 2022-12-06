@@ -28,7 +28,7 @@ class PreWorkoutViewModel @Inject constructor(
     val workout = _workout.asStateFlow()
 
     private val _exercises = MutableStateFlow<List<Exercise>>(
-            emptyList()
+        emptyList()
     )
     val exercises = _exercises.asStateFlow()
 
@@ -44,7 +44,6 @@ class PreWorkoutViewModel @Inject constructor(
     private var job1: Job? = null
     private var job2: Job? = null
     private var job3: Job? = null
-
 
 
     companion object {
@@ -64,14 +63,16 @@ class PreWorkoutViewModel @Inject constructor(
                     job1 = null
                 }
                 job2 = viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId).distinctUntilChanged()
+                    workoutsRepository.getWorkoutWithExerciseByWorkoutId(workoutId)
+                        .distinctUntilChanged()
                         .collect { workoutWithExercise ->
                             _exercises.value = workoutWithExercise.exercises
                         }
                     job2 = null
                 }
                 job3 = viewModelScope.launch(Dispatchers.IO) {
-                    workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId).distinctUntilChanged()
+                    workoutsRepository.getWorkoutWithEquipmentsByWorkoutId(workoutId)
+                        .distinctUntilChanged()
                         .collect { workoutWithEquipments ->
                             _equipments.value = workoutWithEquipments.equipments
                         }
@@ -96,7 +97,7 @@ class PreWorkoutViewModel @Inject constructor(
     }
 
     fun getFormattedDifficulty(): String {
-        if (_workout.value!=null){
+        if (_workout.value != null) {
             val difficulty =
                 _workout.value!!.difficulty
             return difficulty.toString().substring(0, 1) + difficulty.toString().substring(1)
@@ -105,12 +106,12 @@ class PreWorkoutViewModel @Inject constructor(
         return "-"
     }
 
-    fun getAllEquipmentsString(): String {
+    fun getAllEquipmentsString(): String? {
         var string = ""
         val listOfEquipment = _equipments.value
 
         if (listOfEquipment.isEmpty()) {
-            return "No Equipment"
+            return null
         } else {
             var index = 0
             while (index < listOfEquipment.size) {
@@ -125,30 +126,28 @@ class PreWorkoutViewModel @Inject constructor(
         return string
     }
 
-    fun deleteWorkout(){
-        if (_workout.value!=null){
+    fun deleteWorkout() {
+        if (_workout.value != null) {
             val idToDelete = _workout.value!!.workoutId.toString()
             job1?.cancel()
             job2?.cancel()
             job3?.cancel()
 
-        Log.d(TAG,"ViewModelScope Cancelled")
-
-            _workout.value=null
-            _exercises.value= emptyList()
-            _equipments.value= emptyList()
+            _workout.value = null
+            _exercises.value = emptyList()
+            _equipments.value = emptyList()
 
             viewModelScope.launch(Dispatchers.Main) {
                 workoutsRepository.deleteWorkoutEquipmentById(idToDelete)
-                Log.d(TAG,"Workout Equipment deleted!")
+                Log.d(TAG, "Workout Equipment deleted!")
             }
             viewModelScope.launch(Dispatchers.Main) {
                 workoutsRepository.deleteWorkoutExerciseById(idToDelete)
-                Log.d(TAG,"Workout Exercises deleted!")
+                Log.d(TAG, "Workout Exercises deleted!")
             }
             viewModelScope.launch(Dispatchers.Main) {
                 workoutsRepository.deleteWorkoutById(idToDelete)
-                Log.d(TAG,"Workout deleted!")
+                Log.d(TAG, "Workout deleted!")
             }
         }
     }

@@ -19,12 +19,11 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Leaderboard
 import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +38,6 @@ import com.kamilkulka.randletics.ui.theme.DustyGreen
 import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.ui.theme.BubblegumPink
 import com.kamilkulka.randletics.utils.RowWithIcon
-import org.w3c.dom.Text
 
 @Composable
 fun MainScreen(
@@ -50,7 +48,7 @@ fun MainScreen(
 
     ModalDrawer(drawerContent = {
         DrawerContent(modifier = Modifier.fillMaxSize(),
-            enableAddingWorkout = workoutList.size<5,
+            enableAddingWorkout = workoutList.size < 5,
             onAddWorkoutButtonClick = {
                 navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
             },
@@ -135,50 +133,83 @@ private fun MainScreenContent(
 }
 
 @Composable
-fun DrawerContent(modifier: Modifier=Modifier,
-                  onAddWorkoutButtonClick: () -> Unit,
-                  onExercisesButtonClick: () -> Unit,
-                  onSettingsButtonClick: () -> Unit,
-                  enableAddingWorkout:Boolean = true){
+fun DrawerContent(
+    modifier: Modifier = Modifier,
+    onAddWorkoutButtonClick: () -> Unit,
+    onExercisesButtonClick: () -> Unit,
+    onSettingsButtonClick: () -> Unit,
+    enableAddingWorkout: Boolean = true
+) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo",
-            modifier = Modifier.scale(1.5f).padding(vertical = 42.dp))
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = null,
+            modifier = Modifier
+                .scale(1.5f)
+                .padding(vertical = 42.dp)
+        )
         Divider()
-        Column(modifier = Modifier
-            .fillMaxWidth().fillMaxHeight()
-            .padding(horizontal = 64.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(horizontal = 64.dp)
+        ) {
             val drawerButtonModifier = Modifier.padding(vertical = 18.dp)
             val drawerButtonTextStyle = TextStyle(fontWeight = FontWeight.Light, fontSize = 20.sp)
 
-            TextButton(onClick = {},
+            TextButton(
+                onClick = {},
                 enabled = false,
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
-                    disabledContentColor =  BubblegumPink)) {
-                Text(text = "Main Screen", style = drawerButtonTextStyle)
+                    disabledContentColor = BubblegumPink
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.label_main_screen),
+                    style = drawerButtonTextStyle
+                )
             }
-            TextButton( onClick = { onAddWorkoutButtonClick() },
+            TextButton(
+                onClick = { onAddWorkoutButtonClick() },
                 modifier = drawerButtonModifier,
                 enabled = enableAddingWorkout,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f))) {
-                Text(text = "Add Workout", style = drawerButtonTextStyle)
+                    disabledContentColor = Color.Black.copy(0.4f)
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.label_add_workout),
+                    style = drawerButtonTextStyle
+                )
             }
-            TextButton(onClick = { onExercisesButtonClick() },
+            TextButton(
+                onClick = { onExercisesButtonClick() },
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f))) {
-                Text(text = "Exercises", style = drawerButtonTextStyle)
+                    disabledContentColor = Color.Black.copy(0.4f)
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.label_exercises),
+                    style = drawerButtonTextStyle
+                )
             }
-            TextButton(onClick = { onSettingsButtonClick() },
+            TextButton(
+                onClick = { onSettingsButtonClick() },
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f))) {
-                Text(text = "Settings", style = drawerButtonTextStyle)
+                    disabledContentColor = Color.Black.copy(0.4f)
+                )
+            ) {
+                Text(
+                    text = stringResource(id = R.string.label_settings),
+                    style = drawerButtonTextStyle
+                )
             }
         }
     }
@@ -229,12 +260,12 @@ fun WorkoutBox(
             RowWithIcon(
                 imageVector = Icons.Rounded.Leaderboard,
                 text = workout.difficulty.name,
-                contentDescription = "Difficulty",
+                contentDescription = null
             )
             RowWithIcon(
                 imageVector = Icons.Rounded.SettingsAccessibility,
                 text = "$numberOfExercises",
-                contentDescription = "Exercises",
+                contentDescription = null
             )
         }
 
@@ -262,10 +293,10 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
         ) {
             Icon(
                 imageVector = Icons.Rounded.Add,
-                contentDescription = "Add Workout",
+                contentDescription = null,
                 modifier = Modifier.size(124.dp)
             )
-            Text(text = "Add Workout")
+            Text(text = stringResource(id = R.string.label_add_workout))
         }
     }
 }

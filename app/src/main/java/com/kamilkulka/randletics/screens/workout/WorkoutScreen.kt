@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.ui.theme.LimeGreen
@@ -58,7 +60,9 @@ fun WorkoutScreen(
                         modifier = Modifier.padding(4.dp)
                     )
                     Text(
-                        text = "Exercises \nleft",
+                        text = stringResource(id = R.string.label_exercises) + " \n" + stringResource(
+                            id = R.string.text_left
+                        ),
                         color = Beige,
                         fontWeight = FontWeight.Normal,
                         fontSize = 16.sp,
@@ -78,8 +82,11 @@ fun WorkoutScreen(
                         end = 14.dp
                     ),
                     onClick = { viewModel.setExitPopup() }) {
-                    Icon(imageVector = Icons.Rounded.Flag, contentDescription = "End")
-                    Text(text = "Finish Workout", fontSize = 16.sp)
+                    Icon(imageVector = Icons.Rounded.Flag, contentDescription = null)
+                    Text(
+                        text = stringResource(id = R.string.label_finish_workout),
+                        fontSize = 16.sp
+                    )
                 }
             }
 
@@ -103,7 +110,7 @@ fun WorkoutScreen(
                                         fontWeight = FontWeight.SemiBold
                                     )
                                 ) {
-                                    append("Relax,\n")
+                                    append(stringResource(id = R.string.rest_1) + "\n")
                                 }
                                 withStyle(
                                     style = SpanStyle(
@@ -112,7 +119,7 @@ fun WorkoutScreen(
                                         fontWeight = FontWeight.Light
                                     )
                                 ) {
-                                    append("breathe out")
+                                    append(stringResource(id = R.string.rest_2))
                                 }
                             })
                     }
@@ -138,7 +145,7 @@ fun WorkoutScreen(
                             )
                             Spacer(modifier = Modifier.size(16.dp))
                             Text(
-                                text = "Seconds Left",
+                                text = stringResource(id = R.string.label_seconds_left),
                                 fontSize = 16.sp,
                                 color = Beige,
                                 textAlign = TextAlign.Center
@@ -168,10 +175,10 @@ fun WorkoutScreen(
                             onClick = {
                                 viewModel.skipCounter()
                             }) {
-                            Text(text = "Skip", fontSize = 16.sp)
+                            Text(text = stringResource(id = R.string.label_skip), fontSize = 16.sp)
                             Icon(
                                 imageVector = Icons.Rounded.KeyboardArrowRight,
-                                contentDescription = "Skip"
+                                contentDescription = null
                             )
                         }
                     }
@@ -199,28 +206,35 @@ fun WorkoutScreen(
                             color = LimeGreen
                         )
                         Spacer(modifier = Modifier.size(12.dp))
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()) {
-                        Button(
-                            modifier = Modifier.wrapContentSize(),
-                            shape = CircleShape,
-                            contentPadding = PaddingValues(
-                                vertical = 10.dp,
-                                horizontal = 14.dp
-                            ),
-                            colors=ButtonDefaults.buttonColors(
-                                backgroundColor = LimeGreen,
-                                contentColor = DustyGreen),
-                            onClick = {
-                                viewModel.openTutorial(context)
-                            }) {
-                            Text(text = "Tutorial", fontSize = 16.sp)
-                            Icon(
-                                imageVector = Icons.Rounded.PlayArrow,
-                                contentDescription = null)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                        ) {
+                            Button(
+                                modifier = Modifier.wrapContentSize(),
+                                shape = CircleShape,
+                                contentPadding = PaddingValues(
+                                    vertical = 10.dp,
+                                    horizontal = 14.dp
+                                ),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = LimeGreen,
+                                    contentColor = DustyGreen
+                                ),
+                                onClick = {
+                                    viewModel.openTutorial(context)
+                                }) {
+                                Text(
+                                    text = stringResource(id = R.string.label_tutorial),
+                                    fontSize = 16.sp
+                                )
+                                Icon(
+                                    imageVector = Icons.Rounded.PlayArrow,
+                                    contentDescription = null
+                                )
+                            }
                         }
-                    }
                         Spacer(modifier = Modifier.size(12.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(0.5f),
@@ -241,7 +255,7 @@ fun WorkoutScreen(
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(
-                                    text = "Reps",
+                                    text = stringResource(id = R.string.label_repetitions_short),
                                     fontSize = 16.sp,
                                     color = Beige,
                                     textAlign = TextAlign.Center
@@ -280,7 +294,7 @@ fun WorkoutScreen(
                                 })
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(
-                                    text = "Series",
+                                    text = stringResource(id = R.string.label_series),
                                     fontSize = 16.sp,
                                     color = Beige,
                                     textAlign = TextAlign.Center
@@ -298,22 +312,28 @@ fun WorkoutScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                             ) {
-                                append("Equipment:\n")
+                                append(stringResource(id = R.string.label_equipment) + ":\n")
                             }
                             withStyle(
                                 style = SpanStyle(color = Beige, fontSize = 16.sp)
                             ) {
-                                append(viewModel.getEquipmentForExercise())
+                                append(
+                                    viewModel.getEquipmentForExercise()
+                                        ?: stringResource(id = R.string.label_no_equipment)
+                                )
                             }
 
                         }, modifier = Modifier.fillMaxWidth())
                     }
                     Text(text = buildAnnotatedString {
+                        val txtNext = stringResource(id = R.string.label_next)
+                        val txtEndOfWorkout = stringResource(id = R.string.label_end_of_workout)
+
                         withStyle(style = ParagraphStyle(lineHeight = 32.sp)) {
                             withStyle(
                                 style = SpanStyle(color = Beige, fontSize = 16.sp)
                             ) {
-                                append("Next\n")
+                                append(txtNext + "\n")
                             }
                             withStyle(
                                 style = SpanStyle(
@@ -322,7 +342,9 @@ fun WorkoutScreen(
                                     fontWeight = FontWeight.Medium
                                 )
                             ) {
-                                append(viewModel.getNextExerciseTitle())
+                                append(
+                                    viewModel.getNextExerciseTitle() ?: txtEndOfWorkout
+                                )
                             }
                         }
                     }, modifier = Modifier.fillMaxWidth(0.75f))
@@ -353,11 +375,13 @@ fun WorkoutScreen(
                             }
                         }) {
                         val buttonText =
-                            if (viewModel.getExercisesLeft() == 0 && viewModel.getSeries() == 3) "Complete" else "Next"
+                            if (viewModel.getExercisesLeft() == 0 && viewModel.getSeries() == 3) stringResource(
+                                id = R.string.label_complete
+                            ) else stringResource(id = R.string.label_next)
                         Text(text = buttonText, fontSize = 24.sp)
                         Icon(
                             imageVector = Icons.Rounded.KeyboardArrowRight,
-                            contentDescription = "Complete"
+                            contentDescription = stringResource(id = R.string.label_complete)
                         )
                     }
                 }
@@ -366,7 +390,7 @@ fun WorkoutScreen(
         }
         if (viewModel.exitPopup.collectAsState().value) {
             AlertPopUp(
-                contentText = "Do you want to finish this workout?",
+                contentText = stringResource(id = R.string.finish_workout_inquiry),
                 onConfirmClick = {
                     viewModel.setExitPopup()
                     navController.popBackStack(
