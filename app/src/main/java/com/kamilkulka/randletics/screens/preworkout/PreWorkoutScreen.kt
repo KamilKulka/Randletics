@@ -24,9 +24,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
-import com.kamilkulka.randletics.ui.theme.Beige
-import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.utils.AlertPopUp
 import com.kamilkulka.randletics.utils.RowWithIcon
 
@@ -35,7 +32,7 @@ fun PreWorkoutScreen(
     navController: NavController,
     viewModel: PreWorkoutViewModel = hiltViewModel()
 ) {
-    Scaffold(backgroundColor = DustyGreen,
+    Scaffold(backgroundColor = MaterialTheme.colors.background,
         topBar = {
             TopAppBar(
                 elevation = 0.dp,
@@ -77,7 +74,7 @@ fun PreWorkoutScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            DustyGreen, BrightPurple
+                            MaterialTheme.colors.background, MaterialTheme.colors.primary
                         ), startY = 200f, endY = 600f
                     )
                 )
@@ -146,7 +143,7 @@ fun PreWorkoutScreen(
                                         end = 2.dp
                                     ),
                                     text = exercise.name,
-                                    color = Beige
+                                    color = MaterialTheme.colors.secondary
                                 )
                             }
                         }
@@ -158,7 +155,7 @@ fun PreWorkoutScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Button(
                     shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(backgroundColor = DustyGreen),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
                     contentPadding = PaddingValues(8.dp),
                     modifier = Modifier
                         .fillMaxWidth()

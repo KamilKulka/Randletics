@@ -1,10 +1,10 @@
 package com.kamilkulka.randletics.screens.exercises
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.models.entities.Exercise
-import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.utils.FilterDropDown
 import com.kamilkulka.randletics.utils.TopIconButton
 import com.kamilkulka.randletics.utils.getDifficultyString
@@ -33,6 +32,7 @@ fun ExercisesScreen(
     navController: NavController,
     viewModel: ExercisesViewModel = hiltViewModel()
 ) {
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -58,7 +58,10 @@ fun ExercisesScreen(
                 fontSize = 42.sp,
                 modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 32.dp)
             )
-            Divider()
+            Divider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = MaterialTheme.colors.primary
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,12 +119,15 @@ fun ExercisesScreen(
                     }
                 }
             }
-            Divider()
+            Divider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = MaterialTheme.colors.primary
+            )
+
             LazyColumn {
                 items(items = viewModel.listOfExercises.value) { exercise ->
                     ExerciseRow(exercise = exercise)
                 }
-
             }
         }
     }
@@ -136,12 +142,18 @@ fun FilterRow(text: String, onClick: () -> Unit) {
 
 @Composable
 fun ExerciseRow(exercise: Exercise) {
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Beige, shape = RoundedCornerShape(20.dp))
-    ) {
-        Text(text = exercise.name)
-
+    Surface(elevation = 12.dp, shape = RoundedCornerShape(CornerSize(26.dp)), modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Column( modifier = Modifier.weight(0.7f)) {
+                Text(text = exercise.name)
+                Text(text = exercise.defaultRepeats.toString())
+                Text(text = exercise.muscleGroup.name)
+            }
+            Text(text = exercise.difficulty.name, modifier = Modifier.weight(0.3f))
+        }
     }
 }

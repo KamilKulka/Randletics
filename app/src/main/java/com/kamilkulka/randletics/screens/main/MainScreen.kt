@@ -19,7 +19,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Leaderboard
 import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,10 +32,6 @@ import coil.compose.rememberImagePainter
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.models.entities.Workout
-import com.kamilkulka.randletics.ui.theme.Beige
-import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.BrightPurple
-import com.kamilkulka.randletics.ui.theme.BubblegumPink
 import com.kamilkulka.randletics.utils.RowWithIcon
 
 @Composable
@@ -58,7 +53,7 @@ fun MainScreen(
             onSettingsButtonClick = {
                 navController.navigate(route = RandleticsScreens.SettingsScreen.name)
             })
-    }) {
+    }, drawerBackgroundColor = MaterialTheme.colors.background) {
         MainScreenContent(workoutList = workoutList,
             countExercisesOfWorkout = { indexOfWorkout ->
                 viewModel.countExercisesOf(workoutList[indexOfWorkout])
@@ -87,7 +82,7 @@ private fun MainScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding),
-            color = DustyGreen
+            color = MaterialTheme.colors.background
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 Image(
@@ -163,7 +158,7 @@ fun DrawerContent(
                 enabled = false,
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
-                    disabledContentColor = BubblegumPink
+                    disabledContentColor = MaterialTheme.colors.primaryVariant
                 )
             ) {
                 Text(
@@ -176,8 +171,8 @@ fun DrawerContent(
                 modifier = drawerButtonModifier,
                 enabled = enableAddingWorkout,
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f)
+                    contentColor = MaterialTheme.colors.onBackground,
+                    disabledContentColor = MaterialTheme.colors.onBackground.copy(0.4f)
                 )
             ) {
                 Text(
@@ -189,8 +184,8 @@ fun DrawerContent(
                 onClick = { onExercisesButtonClick() },
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f)
+                    contentColor = MaterialTheme.colors.onBackground,
+                    disabledContentColor = MaterialTheme.colors.onBackground.copy(0.4f)
                 )
             ) {
                 Text(
@@ -202,8 +197,8 @@ fun DrawerContent(
                 onClick = { onSettingsButtonClick() },
                 modifier = drawerButtonModifier,
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.Black.copy(0.4f)
+                    contentColor = MaterialTheme.colors.onBackground,
+                    disabledContentColor = MaterialTheme.colors.onBackground.copy(0.4f)
                 )
             ) {
                 Text(
@@ -226,7 +221,7 @@ fun WorkoutBox(
             .aspectRatio(1f)
             .padding(6.dp)
             .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
-            .background(BrightPurple)
+            .background(MaterialTheme.colors.primary)
             .clickable { onClick() }
     ) {
         val width = constraints.maxWidth
@@ -235,6 +230,8 @@ fun WorkoutBox(
         val startColorPoint = Offset(0f, height * 0.35f)
         val endColorPoint = Offset(width.toFloat(), height * 0.6f)
         //ColoredPath
+        val backgroundColor = MaterialTheme.colors.surface
+
         val colorLayerPath = Path().apply {
             moveTo(startColorPoint.x, startColorPoint.y)
             lineTo(endColorPoint.x, endColorPoint.y)
@@ -243,14 +240,14 @@ fun WorkoutBox(
             close()
         }
         Canvas(modifier = Modifier.fillMaxSize()) {
-            drawPath(path = colorLayerPath, color = Beige)
+            drawPath(path = colorLayerPath, color = backgroundColor)
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
-            Text(text = workout.title, modifier = Modifier, fontSize = 20.sp, color = DustyGreen)
+            Text(text = workout.title, modifier = Modifier, fontSize = 20.sp, color = MaterialTheme.colors.background)
         }
         Column(
             modifier = Modifier
@@ -282,12 +279,12 @@ fun AddWorkoutBox(onAddWorkout: () -> Unit) {
                 onAddWorkout()
             },
         shape = RoundedCornerShape(corner = CornerSize(15.dp)),
-        border = BorderStroke(width = 8.dp, color = BrightPurple)
+        border = BorderStroke(width = 8.dp, color = MaterialTheme.colors.primary)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DustyGreen),
+                .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

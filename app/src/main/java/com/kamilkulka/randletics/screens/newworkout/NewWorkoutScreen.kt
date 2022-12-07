@@ -9,8 +9,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.R
-import com.kamilkulka.randletics.ui.theme.Beige
-import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.BrightPurple
 
 @Composable
 fun NewWorkoutScreen(
@@ -34,7 +29,7 @@ fun NewWorkoutScreen(
     viewModel: NewWorkoutViewModel = hiltViewModel()
 ) {
     val equipmentList = viewModel.equipmentList.collectAsState().value
-    Scaffold(backgroundColor = DustyGreen,
+    Scaffold(backgroundColor = MaterialTheme.colors.background,
         topBar = {
             TopAppBar(
                 elevation = 0.dp,
@@ -51,8 +46,8 @@ fun NewWorkoutScreen(
                     Text(
                         text = stringResource(id = R.string.label_add_workout),
                         fontSize = 24.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colors.onBackground
                     )
                 }
             }
@@ -88,11 +83,11 @@ fun NewWorkoutScreen(
                         onValueChange = viewModel::setDifficultySlider,
                         steps = 1,
                         colors = SliderDefaults.colors(
-                            thumbColor = BrightPurple,
-                            activeTickColor = DustyGreen,
-                            inactiveTickColor = DustyGreen,
-                            activeTrackColor = DustyGreen,
-                            inactiveTrackColor = DustyGreen
+                            thumbColor = MaterialTheme.colors.primary,
+                            activeTickColor = MaterialTheme.colors.background,
+                            inactiveTickColor = MaterialTheme.colors.background,
+                            activeTrackColor = MaterialTheme.colors.background,
+                            inactiveTrackColor = MaterialTheme.colors.background
                         )
                     )
                 }
@@ -127,7 +122,7 @@ fun NewWorkoutScreen(
                                     viewModel.createWorkout()
                                     navController.popBackStack()
                                 },
-                            color = BrightPurple,
+                            color = MaterialTheme.colors.primary,
                             shape = CircleShape
                         ) {
                             Box(
@@ -139,7 +134,7 @@ fun NewWorkoutScreen(
                                 Text(
                                     text = stringResource(id = R.string.label_add_workout),
                                     fontSize = 24.sp,
-                                    color = DustyGreen
+                                    color = MaterialTheme.colors.background
                                 )
                             }
                         }
@@ -175,7 +170,7 @@ fun FillInContentBox(title: String = "", content: @Composable () -> Unit = {}) {
             .fillMaxWidth()
             .padding(6.dp)
             .clip(RoundedCornerShape(corner = CornerSize(15.dp)))
-            .background(Beige),
+            .background(MaterialTheme.colors.surface),
         contentAlignment = Alignment.TopStart
     ) {
         Column(
@@ -210,9 +205,9 @@ fun CheckboxWithText(
             checked = checked,
             onCheckedChange = { onCheckedChange() },
             colors = CheckboxDefaults.colors(
-                checkedColor = BrightPurple,
-                uncheckedColor = DustyGreen,
-                checkmarkColor = DustyGreen
+                checkedColor = MaterialTheme.colors.primary,
+                uncheckedColor = MaterialTheme.colors.background,
+                checkmarkColor = MaterialTheme.colors.background
             )
         )
         Text(text = text, fontSize = 18.sp)

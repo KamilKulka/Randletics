@@ -22,9 +22,7 @@ import androidx.navigation.NavController
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.ui.theme.Beige
-import com.kamilkulka.randletics.ui.theme.LimeGreen
 import com.kamilkulka.randletics.ui.theme.DustyGreen
-import com.kamilkulka.randletics.ui.theme.BrightPurple
 import com.kamilkulka.randletics.utils.AlertPopUp
 
 @Composable
@@ -33,10 +31,12 @@ fun WorkoutScreen(
     viewModel: WorkoutViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val mainTxtColor= MaterialTheme.colors.onBackground
+
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = BrightPurple
+        color = MaterialTheme.colors.primary
     ) {
         Column {
             Row(
@@ -72,8 +72,8 @@ fun WorkoutScreen(
                 Button(
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = LimeGreen,
-                        contentColor = DustyGreen
+                        backgroundColor = MaterialTheme.colors.surface,
+                        contentColor = MaterialTheme.colors.onSurface
                     ),
                     contentPadding = PaddingValues(
                         top = 10.dp,
@@ -82,7 +82,10 @@ fun WorkoutScreen(
                         end = 14.dp
                     ),
                     onClick = { viewModel.setExitPopup() }) {
-                    Icon(imageVector = Icons.Rounded.Flag, contentDescription = null)
+                    Icon(
+                        imageVector = Icons.Rounded.Flag,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.primaryVariant)
                     Text(
                         text = stringResource(id = R.string.label_finish_workout),
                         fontSize = 16.sp
@@ -93,7 +96,7 @@ fun WorkoutScreen(
             if (viewModel.restScreen.collectAsState().value) {
                 Divider(
                     modifier = Modifier.padding(24.dp),
-                    color = LimeGreen
+                    color = MaterialTheme.colors.surface
                 )
                 Column(
                     modifier = Modifier
@@ -107,7 +110,8 @@ fun WorkoutScreen(
                                 withStyle(
                                     style = SpanStyle(
                                         fontSize = 42.sp,
-                                        fontWeight = FontWeight.SemiBold
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colors.onSecondary
                                     )
                                 ) {
                                     append(stringResource(id = R.string.rest_1) + "\n")
@@ -115,7 +119,7 @@ fun WorkoutScreen(
                                 withStyle(
                                     style = SpanStyle(
                                         fontSize = 42.sp,
-                                        color = Beige,
+                                        color = MaterialTheme.colors.surface,
                                         fontWeight = FontWeight.Light
                                     )
                                 ) {
@@ -141,13 +145,14 @@ fun WorkoutScreen(
                         ) {
                             Text(
                                 text = viewModel.timeLeft.collectAsState().value.toString(),
-                                fontSize = 42.sp
+                                fontSize = 42.sp,
+                                color = MaterialTheme.colors.onSecondary
                             )
                             Spacer(modifier = Modifier.size(16.dp))
                             Text(
                                 text = stringResource(id = R.string.label_seconds_left),
                                 fontSize = 16.sp,
-                                color = Beige,
+                                color = MaterialTheme.colors.onSecondary,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -163,8 +168,8 @@ fun WorkoutScreen(
                             modifier = Modifier.width(100.dp),
                             shape = CircleShape,
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = LimeGreen,
-                                contentColor = DustyGreen
+                                backgroundColor = MaterialTheme.colors.secondary,
+                                contentColor = MaterialTheme.colors.onSecondary
                             ),
                             contentPadding = PaddingValues(
                                 top = 10.dp,
@@ -186,7 +191,7 @@ fun WorkoutScreen(
             } else {
                 Column(
                     modifier = Modifier
-                        .background(DustyGreen)
+                        .background(MaterialTheme.colors.background)
                         .fillMaxWidth()
                         .fillMaxHeight(0.85f),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -203,7 +208,7 @@ fun WorkoutScreen(
                                 .fillMaxWidth(),
                             fontSize = 42.sp,
                             fontWeight = FontWeight.Medium,
-                            color = LimeGreen
+                            color = mainTxtColor
                         )
                         Spacer(modifier = Modifier.size(12.dp))
                         Row(
@@ -219,8 +224,8 @@ fun WorkoutScreen(
                                     horizontal = 14.dp
                                 ),
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = LimeGreen,
-                                    contentColor = DustyGreen
+                                    backgroundColor = MaterialTheme.colors.secondary,
+                                    contentColor = MaterialTheme.colors.onSecondary
                                 ),
                                 onClick = {
                                     viewModel.openTutorial(context)
@@ -251,13 +256,14 @@ fun WorkoutScreen(
                                 Text(
                                     text = viewModel.getReps().toString(),
                                     fontSize = 32.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
+                                    color = mainTxtColor
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(
                                     text = stringResource(id = R.string.label_repetitions_short),
                                     fontSize = 16.sp,
-                                    color = Beige,
+                                    color = mainTxtColor,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -276,7 +282,7 @@ fun WorkoutScreen(
                                 Text(buildAnnotatedString {
                                     withStyle(
                                         style = SpanStyle(
-                                            color = LimeGreen,
+                                            color = MaterialTheme.colors.primary,
                                             fontSize = 32.sp,
                                             fontWeight = FontWeight.Medium
                                         )
@@ -285,7 +291,6 @@ fun WorkoutScreen(
                                     }
                                     withStyle(
                                         style = SpanStyle(
-                                            color = Beige,
                                             fontSize = 18.sp
                                         )
                                     ) {
@@ -296,7 +301,7 @@ fun WorkoutScreen(
                                 Text(
                                     text = stringResource(id = R.string.label_series),
                                     fontSize = 16.sp,
-                                    color = Beige,
+                                    color = mainTxtColor,
                                     textAlign = TextAlign.Center
                                 )
 
@@ -307,15 +312,17 @@ fun WorkoutScreen(
                         Text(text = buildAnnotatedString {
                             withStyle(
                                 style = SpanStyle(
-                                    color = LimeGreen,
                                     fontSize = 24.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
+                                    color = mainTxtColor
                                 )
                             ) {
                                 append(stringResource(id = R.string.label_equipment) + ":\n")
                             }
                             withStyle(
-                                style = SpanStyle(color = Beige, fontSize = 16.sp)
+                                style = SpanStyle(
+                                    color = mainTxtColor,
+                                    fontSize = 16.sp)
                             ) {
                                 append(
                                     viewModel.getEquipmentForExercise()
@@ -331,15 +338,17 @@ fun WorkoutScreen(
 
                         withStyle(style = ParagraphStyle(lineHeight = 32.sp)) {
                             withStyle(
-                                style = SpanStyle(color = Beige, fontSize = 16.sp)
+                                style = SpanStyle(
+                                    color = mainTxtColor,
+                                    fontSize = 16.sp)
                             ) {
                                 append(txtNext + "\n")
                             }
                             withStyle(
                                 style = SpanStyle(
-                                    color = LimeGreen,
                                     fontSize = 24.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
+                                    color = mainTxtColor
                                 )
                             ) {
                                 append(
@@ -352,13 +361,13 @@ fun WorkoutScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(DustyGreen), contentAlignment = Alignment.Center
+                        .background(MaterialTheme.colors.background), contentAlignment = Alignment.Center
                 ) {
                     Button(
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = LimeGreen,
-                            contentColor = DustyGreen
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            contentColor = MaterialTheme.colors.onSecondary
                         ),
                         contentPadding = PaddingValues(
                             vertical = 10.dp,

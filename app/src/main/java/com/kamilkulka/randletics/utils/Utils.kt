@@ -70,7 +70,7 @@ fun AlertPopUp(
                     onConfirmClick()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = LimeGreen,
+                    contentColor = MaterialTheme.colors.onSurface,
                     backgroundColor = Color.Transparent
                 )
             ) {
@@ -83,14 +83,14 @@ fun AlertPopUp(
                     onDismissClick()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = LimeGreen,
+                    contentColor = MaterialTheme.colors.onSurface,
                     backgroundColor = Color.Transparent
                 )
             ) {
                 Text(text = dismissButtonText, fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
             }
-        }, backgroundColor = DustyGreen,
-        contentColor = LimeGreen,
+        }, backgroundColor = MaterialTheme.colors.surface,
+        contentColor = MaterialTheme.colors.onSurface,
         shape = RoundedCornerShape(24.dp)
     )
 }
@@ -101,7 +101,7 @@ fun TopIconButton(imageVector: ImageVector, onClick: () -> Unit) {
         Icon(
             imageVector = imageVector,
             contentDescription = null,
-            tint = Color.Black,
+            tint = MaterialTheme.colors.onBackground,
             modifier = Modifier.size(38.dp)
         )
     }
@@ -125,7 +125,7 @@ fun FilterDropDown(
         Text(
             text = filterCategoryName,
             fontSize = 20.sp,
-            color = Color.Black,
+            color = MaterialTheme.colors.onBackground,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center
         )
@@ -134,7 +134,7 @@ fun FilterDropDown(
                 Text(
                     text = chosenElement,
                     fontSize = 20.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Light,
                     textAlign = TextAlign.Center
                 )
