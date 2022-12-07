@@ -291,6 +291,7 @@ fun WorkoutScreen(
                                     }
                                     withStyle(
                                         style = SpanStyle(
+                                            color = mainTxtColor,
                                             fontSize = 18.sp
                                         )
                                     ) {

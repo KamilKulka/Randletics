@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,47 +25,14 @@ import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.utils.AlertPopUp
 import com.kamilkulka.randletics.utils.RowWithIcon
+import com.kamilkulka.randletics.utils.TopIconButton
 
 @Composable
 fun PreWorkoutScreen(
     navController: NavController,
     viewModel: PreWorkoutViewModel = hiltViewModel()
 ) {
-    Scaffold(backgroundColor = MaterialTheme.colors.background,
-        topBar = {
-            TopAppBar(
-                elevation = 0.dp,
-                contentPadding = PaddingValues(12.dp),
-                backgroundColor = Color.Transparent
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowLeft,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clickable {
-                                navController.popBackStack()
-                            })
-                    if (viewModel.workout.collectAsState().value != null) {
-                        Icon(
-                            imageVector = Icons.Rounded.Delete,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(32.dp)
-                                .clickable {
-                                    viewModel.setDeletePopUp()
-                                })
-                    }
-                }
-            }
-        }) { contentPadding ->
+    Scaffold(backgroundColor = MaterialTheme.colors.background) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,10 +45,27 @@ fun PreWorkoutScreen(
                     )
                 )
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                TopIconButton(imageVector = Icons.Rounded.KeyboardArrowLeft) {
+                    navController.popBackStack()
+                }
+                if (viewModel.workout.collectAsState().value != null) {
+
+                    TopIconButton(imageVector = Icons.Rounded.DeleteOutline) {
+                        viewModel.setDeletePopUp()
+                    }
+                }
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(210.dp),
+                    .height(140.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
