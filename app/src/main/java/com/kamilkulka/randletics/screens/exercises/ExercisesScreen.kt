@@ -49,7 +49,7 @@ fun ExercisesScreen(
                     navController.popBackStack()
                 })
                 TopIconButton(imageVector = Icons.Rounded.DeleteOutline, onClick = {
-
+                    //TODO: Deleting workouts//
                 })
             }
             Text(
@@ -90,6 +90,7 @@ fun ExercisesScreen(
                         ) {
                             viewModel.setDifficultyFilter(difficulty)
                             viewModel.setDifficultyDropDown()
+                            //TODO: Filtering by difficulty//
                         }
                     }
                 }
@@ -115,6 +116,7 @@ fun ExercisesScreen(
                         ) {
                             viewModel.setMuscleFilter(muscleType)
                             viewModel.setMuscleCategoryDropDown()
+                            //TODO: Filtering by muscle type//
                         }
                     }
                 }
@@ -142,6 +144,8 @@ fun FilterRow(text: String, onClick: () -> Unit) {
 
 @Composable
 fun ExerciseRow(exercise: Exercise) {
+    //TODO: Make exercise row prettier//
+    //TODO: Add more data and link to YT video, string with equipments needed for this workout and so on...//
     Surface(elevation = 12.dp, shape = RoundedCornerShape(CornerSize(26.dp)), modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
         Row(
             modifier = Modifier

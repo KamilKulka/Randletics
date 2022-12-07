@@ -2,22 +2,22 @@ package com.kamilkulka.randletics.screens.main
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Leaderboard
-import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -33,15 +33,20 @@ import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.RandleticsScreens
 import com.kamilkulka.randletics.models.entities.Workout
 import com.kamilkulka.randletics.utils.RowWithIcon
+import com.kamilkulka.randletics.utils.TopIconButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
     navController: NavController,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val workoutList = viewModel.workoutsList.collectAsState().value
 
-    ModalDrawer(drawerContent = {
+    ModalDrawer(
+        drawerContent = {
         DrawerContent(modifier = Modifier.fillMaxSize(),
             enableAddingWorkout = workoutList.size < 5,
             onAddWorkoutButtonClick = {
@@ -53,13 +58,20 @@ fun MainScreen(
             onSettingsButtonClick = {
                 navController.navigate(route = RandleticsScreens.SettingsScreen.name)
             })
-    }, drawerBackgroundColor = MaterialTheme.colors.background) {
+    },
+        drawerBackgroundColor = MaterialTheme.colors.background,
+        drawerState = drawerState) {
         MainScreenContent(workoutList = workoutList,
             countExercisesOfWorkout = { indexOfWorkout ->
                 viewModel.countExercisesOf(workoutList[indexOfWorkout])
             },
             onAddWorkout = {
                 navController.navigate(route = RandleticsScreens.NewWorkoutScreen.name)
+            },
+            onDrawerButtonClick = {
+                scope.launch {
+                    drawerState.open()
+                }
             },
             onWorkoutBoxClick = { indexOfWorkout ->
                 navController.navigate(
@@ -75,6 +87,7 @@ private fun MainScreenContent(
     workoutList: List<Workout>,
     countExercisesOfWorkout: (Int) -> Int, //TODO simplify function
     onAddWorkout: () -> Unit,
+    onDrawerButtonClick: ()-> Unit,
     onWorkoutBoxClick: (Int) -> Unit
 ) {
     Scaffold { contentPadding ->
@@ -85,10 +98,20 @@ private fun MainScreenContent(
             color = MaterialTheme.colors.background
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
-                Image(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(400.dp),
+                        .height(140.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    TopIconButton(imageVector = Icons.Rounded.Menu) {
+                        onDrawerButtonClick()
+                    }
+                }
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     painter = rememberImagePainter(
                         R.drawable.main_photo
                     ),
@@ -96,15 +119,16 @@ private fun MainScreenContent(
                     contentScale = ContentScale.Crop
                 )
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
+
+            }
+            Box(contentAlignment = Alignment.BottomStart) {
+                LazyRow(
                     contentPadding = PaddingValues(
-                        start = 5.dp,
-                        end = 5.dp,
-                        top = 5.dp,
-                        bottom = 100.dp
+                        5.dp
                     ),
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
                 ) {
                     items(workoutList.size) { index ->
                         WorkoutBox(
