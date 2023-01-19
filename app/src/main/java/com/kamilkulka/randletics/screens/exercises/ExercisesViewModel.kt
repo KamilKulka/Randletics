@@ -1,5 +1,6 @@
 package com.kamilkulka.randletics.screens.exercises
 
+import androidx.compose.ui.text.capitalize
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kamilkulka.randletics.models.Difficulty
@@ -60,4 +61,10 @@ class ExercisesViewModel @Inject constructor(private val workoutsRepository: Wor
         _muscleCategoryDropDown.value = !_muscleCategoryDropDown.value
     }
 
+    fun toFormattedString(string: String): String{
+        if (string.isNotEmpty()){
+            return string.substring(0)+string.substring(1).lowercase()
+        }
+        return string
+    }
 }

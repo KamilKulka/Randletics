@@ -1,5 +1,6 @@
 package com.kamilkulka.randletics.screens.exercises
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,9 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kamilkulka.randletics.R
 import com.kamilkulka.randletics.models.entities.Exercise
+import com.kamilkulka.randletics.ui.theme.Beige
 import com.kamilkulka.randletics.utils.FilterDropDown
 import com.kamilkulka.randletics.utils.TopIconButton
 import com.kamilkulka.randletics.utils.getDifficultyString
@@ -146,18 +149,39 @@ fun FilterRow(text: String, onClick: () -> Unit) {
 fun ExerciseRow(exercise: Exercise) {
     //TODO: Make exercise row prettier//
     //TODO: Add more data and link to YT video, string with equipments needed for this workout and so on...//
-    Surface(elevation = 12.dp, shape = RoundedCornerShape(CornerSize(26.dp)), modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-        Row(
+    Surface(
+        color = MaterialTheme.colors.background,
+        shape = RoundedCornerShape(CornerSize(26.dp)),
+        border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colors.onPrimary),
+        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = 16.dp, vertical = 6.dp)
         ) {
-            Column( modifier = Modifier.weight(0.7f)) {
-                Text(text = exercise.name)
-                Text(text = exercise.defaultRepeats.toString())
-                Text(text = exercise.muscleGroup.name)
+            Text(text = exercise.name, fontWeight = FontWeight.Medium, fontSize = 20.sp, modifier = Modifier.padding(vertical = 4.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                var formattedMuscleGroup = exercise.muscleGroup.name
+                var formattedDifficulty = exercise.difficulty.name
+
+                if (formattedMuscleGroup.isNotEmpty()) {
+                    formattedMuscleGroup =
+                        formattedMuscleGroup.substring(startIndex = 0, endIndex = 1) + formattedMuscleGroup.substring(1)
+                            .lowercase()
+                }
+
+                if (formattedDifficulty.isNotEmpty()) {
+                    formattedDifficulty =
+                        formattedDifficulty.substring(startIndex = 0, endIndex = 1) + formattedDifficulty.substring(1)
+                            .lowercase()
+                }
+                Text(text = formattedMuscleGroup)
+                Text(text = formattedDifficulty)
             }
-            Text(text = exercise.difficulty.name, modifier = Modifier.weight(0.3f))
         }
     }
 }
