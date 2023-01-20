@@ -130,7 +130,7 @@ fun FilterDropDown(
             textAlign = TextAlign.Center
         )
         Box {
-            Row {
+            Row(modifier = Modifier.clickable { onDropButtonClick() }) {
                 Text(
                     text = chosenElement,
                     fontSize = 20.sp,
@@ -140,8 +140,7 @@ fun FilterDropDown(
                 )
                 Icon(
                     imageVector = if (expanded) Icons.Rounded.KeyboardArrowUp else Icons.Rounded.KeyboardArrowDown,
-                    contentDescription = null,
-                    modifier = Modifier.clickable { onDropButtonClick() })
+                    contentDescription = null)
             }
             DropdownMenu(
                 expanded = expanded,

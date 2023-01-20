@@ -145,7 +145,6 @@ fun FilterRow(text: String, onClick: () -> Unit) {
 
 @Composable
 fun ExerciseRow(exercise: Exercise) {
-    //TODO: Make exercise row prettier//
     //TODO: Add more data and link to YT video, string with equipments needed for this workout and so on...//
     Surface(
         color = MaterialTheme.colors.background,
