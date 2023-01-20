@@ -93,7 +93,6 @@ fun ExercisesScreen(
                         ) {
                             viewModel.setDifficultyFilter(difficulty)
                             viewModel.setDifficultyDropDown()
-                            //TODO: Filtering by difficulty//
                         }
                     }
                 }
@@ -119,7 +118,6 @@ fun ExercisesScreen(
                         ) {
                             viewModel.setMuscleFilter(muscleType)
                             viewModel.setMuscleCategoryDropDown()
-                            //TODO: Filtering by muscle type//
                         }
                     }
                 }
@@ -130,7 +128,7 @@ fun ExercisesScreen(
             )
 
             LazyColumn {
-                items(items = viewModel.listOfExercises.value) { exercise ->
+                items(items = viewModel.listOfFilteredExercises.value) { exercise ->
                     ExerciseRow(exercise = exercise)
                 }
             }

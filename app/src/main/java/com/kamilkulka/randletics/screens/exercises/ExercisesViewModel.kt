@@ -32,6 +32,9 @@ class ExercisesViewModel @Inject constructor(private val workoutsRepository: Wor
     private val _muscleFilterSelected = MutableStateFlow<Muscle?>(null)
     val muscleFilterSelected = _muscleFilterSelected.asStateFlow()
 
+    private val _listOfFilteredExercises = MutableStateFlow<List<Exercise>>(emptyList())
+    val listOfFilteredExercises = _listOfFilteredExercises.asStateFlow()
+
     val difficulties = Difficulty.values()
     val muscleType = Muscle.values()
 
@@ -40,17 +43,35 @@ class ExercisesViewModel @Inject constructor(private val workoutsRepository: Wor
             workoutsRepository.getAllExercises().distinctUntilChanged().collect { listOfExercises ->
                 if (listOfExercises.isNotEmpty()) {
                     _listOfExercises.value = listOfExercises
+                    _listOfFilteredExercises.value = listOfExercises
                 }
             }
         }
     }
 
+    private fun refreshExercisesList() {
+        if (_difficultyFilterSelected.value != null && _muscleFilterSelected.value != null) {
+            _listOfFilteredExercises.value =
+                _listOfExercises.value.filter { it.difficulty == _difficultyFilterSelected.value && it.muscleGroup == _muscleFilterSelected.value }
+        } else if (_difficultyFilterSelected.value == null && _muscleFilterSelected.value != null) {
+            _listOfFilteredExercises.value =
+                _listOfExercises.value.filter { it.muscleGroup == _muscleFilterSelected.value }
+        } else if (_difficultyFilterSelected.value != null && _muscleFilterSelected.value == null) {
+            _listOfFilteredExercises.value =
+                _listOfExercises.value.filter { it.difficulty == _difficultyFilterSelected.value }
+        } else {
+            _listOfFilteredExercises.value = _listOfExercises.value
+        }
+    }
+
     fun setDifficultyFilter(difficulty: Difficulty?) {
         _difficultyFilterSelected.value = difficulty
+        refreshExercisesList()
     }
 
     fun setMuscleFilter(muscle: Muscle?) {
         _muscleFilterSelected.value = muscle
+        refreshExercisesList()
     }
 
     fun setDifficultyDropDown() {
@@ -61,9 +82,9 @@ class ExercisesViewModel @Inject constructor(private val workoutsRepository: Wor
         _muscleCategoryDropDown.value = !_muscleCategoryDropDown.value
     }
 
-    fun toFormattedString(string: String): String{
-        if (string.isNotEmpty()){
-            return string.substring(0)+string.substring(1).lowercase()
+    fun toFormattedString(string: String): String {
+        if (string.isNotEmpty()) {
+            return string.substring(0) + string.substring(1).lowercase()
         }
         return string
     }
